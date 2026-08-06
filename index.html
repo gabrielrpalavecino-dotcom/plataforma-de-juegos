@@ -764,20 +764,32 @@
 
         // --- MENÚ DE CONFIGURACIÓN DE PARTIDA (ESTÉTICA MODERNA INTEGRADA) ---
         function mostrarConfiguracionPartida() {
+            const juegosDosJugadoresMax = ['Damas', 'Ajedrez', 'Piedra Papel Tijera', 'Tres en Línea'];
+            const esSoloDos = juegosDosJugadoresMax.includes(juegoActual);
+            if (esSoloDos) {
+                numJugadoresConfig = 2;
+            }
+
             const area = document.getElementById('areaContenedorJuego');
             area.innerHTML = `
         <div class="config-box">
           <h3 style="margin-bottom: 5px;">Configurar Partida</h3>
           <p style="text-align: center; color: var(--text-muted); font-size: 13px; margin-bottom: 15px;">${juegoActual}</p>
           
-          <div>
-            <div class="config-section-title">Número de Jugadores:</div>
-            <div class="config-options-grid" id="gridNumJugadores">
-              <button class="btn-config-opt ${numJugadoresConfig === 2 ? 'seleccionado' : ''}" onclick="setNumJugadores(2)">2 Jugadores</button>
-              <button class="btn-config-opt ${numJugadoresConfig === 3 ? 'seleccionado' : ''}" onclick="setNumJugadores(3)">3 Jugadores</button>
-              <button class="btn-config-opt ${numJugadoresConfig === 4 ? 'seleccionado' : ''}" onclick="setNumJugadores(4)">4 Jugadores</button>
+          ${esSoloDos ? `
+            <div style="background: rgba(56, 189, 248, 0.08); border: 1px solid var(--border-color); padding: 10px; border-radius: 10px; text-align: center; font-size: 13px; margin-bottom: 15px; color: #38bdf8;">
+              👥 Este juego es estrictamente para <strong>2 Jugadores</strong>.
             </div>
-          </div>
+          ` : `
+            <div>
+              <div class="config-section-title">Número de Jugadores:</div>
+              <div class="config-options-grid" id="gridNumJugadores">
+                <button class="btn-config-opt ${numJugadoresConfig === 2 ? 'seleccionado' : ''}" onclick="setNumJugadores(2)">2 Jugadores</button>
+                <button class="btn-config-opt ${numJugadoresConfig === 3 ? 'seleccionado' : ''}" onclick="setNumJugadores(3)">3 Jugadores</button>
+                <button class="btn-config-opt ${numJugadoresConfig === 4 ? 'seleccionado' : ''}" onclick="setNumJugadores(4)">4 Jugadores</button>
+              </div>
+            </div>
+          `}
 
           <div>
             <div class="config-section-title">Modo de Oponentes:</div>
