@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>portal de juegos Krusty</title>
+    <title>Portal Táctico Supremo - Portal de Juegos Krusty</title>
 
     <!-- CDNs EmailJS y PeerJS -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
@@ -28,17 +28,26 @@
             padding: 20px;
         }
 
+        h1.main-title {
+            color: #38bdf8;
+            text-align: center;
+            margin-bottom: 24px;
+            font-size: 28px;
+            text-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+            letter-spacing: 1px;
+        }
+
         .glass-panel {
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(15, 23, 42, 0.75);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.25);
             border-radius: 16px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-            padding: 24px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+            padding: 28px;
             width: 100%;
             max-width: 950px;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         h2,
@@ -46,23 +55,66 @@
             text-align: center;
             margin-bottom: 16px;
             letter-spacing: 0.5px;
+            color: #38bdf8;
+        }
+
+        /* TABS DE AUTENTICACIÓN */
+        .auth-tabs {
+            display: flex;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .auth-tab.activo {
+            background: #0284c7;
+            color: #ffffff;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .grid-inputs {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 12px;
+            gap: 14px;
             margin-bottom: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+
+        label.form-label {
+            font-size: 13px;
+            color: #cbd5e1;
+            font-weight: 500;
         }
 
         input,
         select,
         button {
             width: 100%;
-            padding: 12px;
+            padding: 12px 14px;
             border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            background: rgba(0, 0, 0, 0.5);
             color: #f9fafb;
             font-size: 14px;
             outline: none;
@@ -72,19 +124,21 @@
         input:focus,
         select:focus {
             border-color: #38bdf8;
-            box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
         }
 
         button {
-            background: rgba(56, 189, 248, 0.25);
-            border: 1px solid rgba(56, 189, 248, 0.5);
+            background: #0284c7;
+            border: 1px solid #38bdf8;
             cursor: pointer;
             font-weight: 600;
+            color: #fff;
         }
 
         button:hover {
-            background: rgba(56, 189, 248, 0.4);
+            background: #0369a1;
             transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
         }
 
         .btn-group {
@@ -115,12 +169,14 @@
             padding: 10px 5px;
             font-size: 13px;
             text-align: center;
+            color: #e2e8f0;
         }
 
         .btn-juego.activo {
             background: rgba(168, 85, 247, 0.3);
             border-color: #c084fc;
             box-shadow: 0 0 10px rgba(192, 132, 252, 0.3);
+            color: #fff;
         }
 
         #areaContenedorJuego {
@@ -129,8 +185,8 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: rgba(0, 0, 0, 0.25);
-            border: 1px dashed rgba(255, 255, 255, 0.15);
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px dashed rgba(56, 189, 248, 0.25);
             border-radius: 12px;
             padding: 20px;
             margin-top: 15px;
@@ -319,24 +375,63 @@
 
 <body>
 
+    <h1 class="main-title">Portal de Juegos Krusty</h1>
+
     <!-- PORTAL DE AUTENTICACIÓN -->
-    <div class="glass-panel">
-        <h2>Portal de Usuarios</h2>
-        <div class="grid-inputs">
-            <input type="text" id="inputUsuario" placeholder="Usuario">
-            <input type="password" id="inputClave" placeholder="Contraseña">
-            <input type="email" id="inputEmail" placeholder="Correo electrónico">
+    <div class="glass-panel" id="panelAuth">
+        <h2>Acceso al Portal</h2>
+
+        <div class="auth-tabs">
+            <button class="auth-tab activo" id="tabIngresarBtn" onclick="cambiarTabAuth('ingresar')">Ingresar</button>
+            <button class="auth-tab" id="tabRegistrarBtn" onclick="cambiarTabAuth('registrar')">Registrarse</button>
+            <button class="auth-tab" id="tabRecuperarBtn" onclick="cambiarTabAuth('recuperar')">Recuperar Clave</button>
         </div>
-        <div class="btn-group">
-            <button onclick="iniciarSesion()">Iniciar Sesión</button>
-            <button onclick="registrarUsuario()">Registrarse</button>
-            <button onclick="solicitarRecuperacion()">Recuperar Clave</button>
+
+        <!-- FORMULARIO INGRESAR (CAMPOS LIMPIOS) -->
+        <div id="formIngresar">
+            <div class="form-group">
+                <label class="form-label">Usuario o Correo:</label>
+                <input type="text" id="inputIngresoUser" placeholder="usuario@correo.com">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Contraseña:</label>
+                <input type="password" id="inputIngresoClave" placeholder="••••••••">
+            </div>
+            <button onclick="iniciarSesion()">Entrar al Portal</button>
         </div>
+
+        <!-- FORMULARIO REGISTRARSE (CAMPOS LIMPIOS) -->
+        <div id="formRegistrar" style="display: none;">
+            <div class="form-group">
+                <label class="form-label">Nombre de Usuario:</label>
+                <input type="text" id="inputRegUsuario" placeholder="Tu usuario">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Correo Electrónico:</label>
+                <input type="email" id="inputRegEmail" placeholder="tu@correo.com">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Contraseña:</label>
+                <input type="password" id="inputRegClave" placeholder="••••••••">
+            </div>
+            <button onclick="registrarUsuario()">Registrar Cuenta</button>
+        </div>
+
+        <!-- FORMULARIO RECUPERAR (CAMPOS LIMPIOS) -->
+        <div id="formRecuperar" style="display: none;">
+            <div class="form-group">
+                <label class="form-label">Ingresa tu Correo Registrado:</label>
+                <input type="email" id="inputRecEmail" placeholder="tu@correo.com">
+            </div>
+            <button style="background: #c2410c; border-color: #ea580c;" onclick="solicitarRecuperacion()">Recuperar
+                Credenciales por Mail</button>
+        </div>
+
         <div id="mensajeEstado" class="mensaje-estado"></div>
     </div>
 
     <!-- PLATAFORMA MULTIJUEGO -->
-    <div class="glass-panel">
+    <div class="glass-panel" id="panelJuegos" style="display: none;">
         <h2>portal de juegos Krusty</h2>
 
         <div class="grid-inputs">
@@ -376,6 +471,12 @@
             <button class="btn-juego" onclick="seleccionarJuego('Ajedrez')">Ajedrez</button>
         </div>
 
+        <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+            <button
+                style="width: auto; padding: 8px 16px; font-size: 12px; background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2);"
+                onclick="cerrarSesion()">Cerrar Sesión / Volver</button>
+        </div>
+
         <div id="areaContenedorJuego"></div>
     </div>
 
@@ -407,16 +508,32 @@
         let turnoJugador = 1;
         let peer = null, conexionPeer = null;
 
-        function limpiarInputs() {
-            document.getElementById('inputUsuario').value = '';
-            document.getElementById('inputClave').value = '';
-            document.getElementById('inputEmail').value = '';
+        function cambiarTabAuth(tab) {
+            document.getElementById('tabIngresarBtn').classList.remove('activo');
+            document.getElementById('tabRegistrarBtn').classList.remove('activo');
+            document.getElementById('tabRecuperarBtn').classList.remove('activo');
+
+            document.getElementById('formIngresar').style.display = 'none';
+            document.getElementById('formRegistrar').style.display = 'none';
+            document.getElementById('formRecuperar').style.display = 'none';
+            document.getElementById('mensajeEstado').innerText = '';
+
+            if (tab === 'ingresar') {
+                document.getElementById('tabIngresarBtn').classList.add('activo');
+                document.getElementById('formIngresar').style.display = 'block';
+            } else if (tab === 'registrar') {
+                document.getElementById('tabRegistrarBtn').classList.add('activo');
+                document.getElementById('formRegistrar').style.display = 'block';
+            } else if (tab === 'recuperar') {
+                document.getElementById('tabRecuperarBtn').classList.add('activo');
+                document.getElementById('formRecuperar').style.display = 'block';
+            }
         }
 
         function registrarUsuario() {
-            const u = document.getElementById('inputUsuario').value.trim();
-            const p = document.getElementById('inputClave').value.trim();
-            const e = document.getElementById('inputEmail').value.trim();
+            const u = document.getElementById('inputRegUsuario').value.trim();
+            const p = document.getElementById('inputRegClave').value.trim();
+            const e = document.getElementById('inputRegEmail').value.trim();
             const msg = document.getElementById('mensajeEstado');
             if (!u || !p || !e) { msg.innerText = "Completá todos los campos."; return; }
 
@@ -425,31 +542,54 @@
 
             db[u] = { clave: p, email: e };
             localStorage.setItem('plataforma_usuarios', JSON.stringify(db));
-            msg.innerText = `¡Usuario ${u} registrado!`;
-            limpiarInputs();
+            msg.innerText = `¡Usuario ${u} registrado con éxito! Ya puedes iniciar sesión.`;
+            document.getElementById('inputRegUsuario').value = '';
+            document.getElementById('inputRegClave').value = '';
+            document.getElementById('inputRegEmail').value = '';
+            setTimeout(() => cambiarTabAuth('ingresar'), 1500);
         }
 
         function iniciarSesion() {
-            const u = document.getElementById('inputUsuario').value.trim();
-            const p = document.getElementById('inputClave').value.trim();
+            const u = document.getElementById('inputIngresoUser').value.trim();
+            const p = document.getElementById('inputIngresoClave').value.trim();
             const msg = document.getElementById('mensajeEstado');
+            if (!u || !p) { msg.innerText = "Ingresa usuario y contraseña."; return; }
+
             let db = JSON.parse(localStorage.getItem('plataforma_usuarios')) || {};
-            if (db[u] && db[u].clave === p) {
-                msg.innerText = `¡Bienvenido ${u}!`;
-                limpiarInputs();
+            let userFound = db[u];
+            if (!userFound) {
+                let foundKey = Object.keys(db).find(key => db[key].email === u);
+                if (foundKey) userFound = db[foundKey];
+            }
+
+            if (userFound && userFound.clave === p) {
+                msg.innerText = `¡Bienvenido! Entrando al portal...`;
+                document.getElementById('inputIngresoUser').value = '';
+                document.getElementById('inputIngresoClave').value = '';
+                setTimeout(() => {
+                    document.getElementById('panelAuth').style.display = 'none';
+                    document.getElementById('panelJuegos').style.display = 'block';
+                    renderizarTableroActivo();
+                }, 800);
             } else {
-                msg.innerText = "Credenciales incorrectas.";
+                msg.innerText = "Credenciales incorrectas o usuario no registrado.";
             }
         }
 
+        function cerrarSesion() {
+            document.getElementById('panelJuegos').style.display = 'none';
+            document.getElementById('panelAuth').style.display = 'block';
+            cambiarTabAuth('ingresar');
+        }
+
         function solicitarRecuperacion() {
-            const e = document.getElementById('inputEmail').value.trim();
+            const e = document.getElementById('inputRecEmail').value.trim();
             const msg = document.getElementById('mensajeEstado');
             if (!e) { msg.innerText = "Ingresá tu mail para recuperar la clave."; return; }
             const codigo = Math.floor(1000 + Math.random() * 9000).toString();
             msg.innerText = "Enviando código...";
             emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { to_email: e, reset_code: codigo })
-                .then(() => { msg.innerText = "¡Código enviado al correo!"; limpiarInputs(); })
+                .then(() => { msg.innerText = "¡Código enviado al correo!"; document.getElementById('inputRecEmail').value = ''; })
                 .catch(() => { msg.innerText = "Error al enviar el correo. Revisa EmailJS."; });
         }
 
@@ -500,7 +640,7 @@
             }
         }
 
-        // 1. GENERALA (CON BOT COMPLETO)
+        // 1. GENERALA
         let dadosGen = [1, 1, 1, 1, 1], retenidosGen = [false, false, false, false, false], tirosGen = 0;
         let ptsGenJ1 = 0, ptsGenJ2 = 0;
         function initGenerala(area) {
@@ -540,31 +680,44 @@
             tirosGen = 0; retenidosGen = [false, false, false, false, false]; renderDadosG();
         }
 
-        // 2. BATALLA NAVAL (CON BOT QUE RESPONDE)
+        // 2. BATALLA NAVAL
+        let flotaPropia = [12, 13, 14, 45, 55];
         function initBatallaNaval(area) {
             area.innerHTML += `
         <div class="batalla-container">
-          <div><p style="font-size:12px; text-align:center;">Tu Radar</p><div class="grid-10x10" id="navPropio"></div></div>
+          <div><p style="font-size:12px; text-align:center;">Tu Flota</p><div class="grid-10x10" id="navPropio"></div></div>
           <div><p style="font-size:12px; text-align:center;">Radar Rival</p><div class="grid-10x10" id="navRival"></div></div>
         </div>
-        <p id="infoNav" style="margin-top:10px; font-size:13px;">Dispará en el radar rival.</p>
+        <p id="infoNav" style="margin-top:10px; font-size:13px;">Dispará en el radar rival. Tu flota se muestra en tu radar.</p>
       `;
             setTimeout(() => {
                 const p = document.getElementById('navPropio'), r = document.getElementById('navRival');
+                if (!p || !r) return;
+                p.innerHTML = ''; r.innerHTML = '';
                 for (let i = 0; i < 100; i++) {
-                    p.appendChild(document.createElement('div')).className = 'celda-naval';
-                    let c = document.createElement('div'); c.className = 'celda-naval';
+                    let cp = document.createElement('div');
+                    cp.className = 'celda-naval';
+                    if (flotaPropia.includes(i)) {
+                        cp.innerText = '🚢';
+                        cp.style.background = 'rgba(56,189,248,0.4)';
+                    }
+                    p.appendChild(cp);
+
+                    let c = document.createElement('div');
+                    c.className = 'celda-naval';
                     c.onclick = () => {
                         if (c.innerText || turnoJugador !== 1) return;
-                        let agua = Math.random() < 0.7;
-                        c.innerText = agua ? '🌊' : '💥'; c.style.background = agua ? 'rgba(56,189,248,0.2)' : 'rgba(239,68,68,0.5)';
+                        let agua = Math.random() < 0.6;
+                        c.innerText = agua ? '🌊' : '💥';
+                        c.style.background = agua ? 'rgba(56,189,248,0.2)' : 'rgba(239,68,68,0.5)';
                         if (modoJuegoActual === 'bot') {
                             turnoJugador = 2;
-                            document.getElementById('infoNav').innerText = "El Bot está calculando disparo...";
+                            document.getElementById('infoNav').innerText = "El Bot está disparando...";
                             setTimeout(() => {
                                 let cellRnd = p.children[Math.floor(Math.random() * 100)];
-                                cellRnd.innerText = Math.random() < 0.7 ? '🌊' : '💥';
-                                cellRnd.style.background = cellRnd.innerText === '💥' ? 'rgba(239,68,68,0.5)' : 'rgba(56,189,248,0.2)';
+                                let esImpacto = flotaPropia.includes(Array.from(p.children).indexOf(cellRnd));
+                                cellRnd.innerText = esImpacto ? '💥' : '🌊';
+                                cellRnd.style.background = esImpacto ? 'rgba(239,68,68,0.5)' : 'rgba(56,189,248,0.2)';
                                 turnoJugador = 1;
                                 document.getElementById('infoNav').innerText = "Tu turno de disparar.";
                             }, 600);
@@ -575,29 +728,43 @@
             }, 50);
         }
 
-        // 3. DARDOS (CON TURNOS Y BOT COMPLETO)
+        // 3. DARDOS
         let ptsDardosJ1 = 0, ptsDardosBot = 0, tirosDardos = 0;
         function initDardos(area) {
             ptsDardosJ1 = 0; ptsDardosBot = 0; tirosDardos = 0;
             area.innerHTML += `
-        <svg width="200" height="200" viewBox="0 0 100 100" style="cursor:crosshair;" onclick="lanzarDardo(event)">
+        <svg id="svgDardos" width="200" height="200" viewBox="0 0 100 100" style="cursor:crosshair; overflow:visible;" onclick="lanzarDardo(event)">
           <circle cx="50" cy="50" r="48" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
           <circle cx="50" cy="50" r="35" fill="none" stroke="#ef4444" stroke-width="6"/>
           <circle cx="50" cy="50" r="20" fill="none" stroke="#22c55e" stroke-width="6"/>
           <circle cx="50" cy="50" r="6" fill="#eab308"/>
         </svg>
-        <p id="infoDardos" style="margin-top:10px; font-size:14px;">Tus tiros: 0/3</p>
+        <p id="infoDardos" style="margin-top:15px; font-size:14px;">Tus tiros: 0/3</p>
         <p id="scoreDardos" style="margin-top:5px; font-size:13px;">Jugador 1: 0 pts | Bot: 0 pts</p>
       `;
         }
         function lanzarDardo(e) {
             if (tirosDardos >= 3) return;
-            const rect = e.currentTarget.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
-            const dist = Math.sqrt(x * x + y * y);
-            let p = dist < 12 ? 50 : (dist < 40 ? 25 : (dist < 70 ? 10 : 0));
+            const svg = e.currentTarget;
+            const rect = svg.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            const dx = x - 50;
+            const dy = y - 50;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            let p = dist < 6 ? 50 : (dist < 18 ? 25 : (dist < 35 ? 10 : 0));
             ptsDardosJ1 += p; tirosDardos++;
+
+            let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            circle.setAttribute("cx", x);
+            circle.setAttribute("cy", y);
+            circle.setAttribute("r", "3.5");
+            circle.setAttribute("fill", "#38bdf8");
+            circle.setAttribute("stroke", "#ffffff");
+            circle.setAttribute("stroke-width", "1");
+            svg.appendChild(circle);
+
             document.getElementById('infoDardos').innerText = `¡Lanzaste! Puntos: ${p} (Tiros: ${tirosDardos}/3)`;
             document.getElementById('scoreDardos').innerText = `Jugador 1: ${ptsDardosJ1} pts | Bot: ${ptsDardosBot} pts`;
 
@@ -621,6 +788,7 @@
             area.innerHTML += `<div class="grid-3x3" id="g3x3"></div><p id="info3x3" style="margin-top:10px;">Tu turno (X)</p>`;
             setTimeout(() => {
                 const g = document.getElementById('g3x3');
+                if (!g) return;
                 g.innerHTML = tab3x3.map((v, i) => `<div class="casilla-3x3" onclick="click3x3(${i})">${v || ''}</div>`).join('');
             }, 50);
         }
@@ -678,36 +846,60 @@
             document.getElementById('scorePPT').innerText = `Jugador 1: ${ptsPPT1} | Rival: ${ptsPPT2}`;
         }
 
-        // 6. DOMINÓ (CON TURNO DE BOT AUTÓNOMO)
-        let manoDomino = ['🀲', '🀷', '🀼', '🀴', '🀶'];
+        // 6. DOMINÓ
+        let manoDomino = ['[6|4]', '[4|2]', '[2|5]', '[5|1]', '[1|3]'];
+        let mesaDominoExtremos = [4, 3];
         function initDomino(area) {
+            mesaDominoExtremos = [4, 3];
+            manoDomino = ['[6|4]', '[4|2]', '[2|5]', '[5|1]', '[1|3]'];
             area.innerHTML += `
-        <div id="mesaDomino" style="min-height:60px; display:flex; gap:6px; align-items:center; background:rgba(0,0,0,0.3); padding:10px; border-radius:8px; width:100%; justify-content:center; margin-bottom:15px;">Mesa</div>
+        <div id="mesaDomino" style="min-height:60px; display:flex; gap:6px; align-items:center; background:rgba(0,0,0,0.3); padding:10px; border-radius:8px; width:100%; justify-content:center; margin-bottom:15px;">Mesa: [${mesaDominoExtremos[0]}] === [${mesaDominoExtremos[1]}]</div>
         <div id="manoDomino" style="display:flex; gap:8px;"></div>
-        <p id="infoDomino" style="margin-top:10px; font-size:13px;">Toca una ficha para jugarla.</p>
+        <p id="infoDomino" style="margin-top:10px; font-size:13px;">Toca una ficha compatible para jugarla.</p>
       `;
             renderDomino();
         }
         function renderDomino() {
             const m = document.getElementById('manoDomino'); if (!m) return;
-            m.innerHTML = manoDomino.map((f, i) => `<div class="carta" style="width:45px; height:75px; font-size:24px;" onclick="jugarDomino(${i})">${f}</div>`).join('');
+            m.innerHTML = manoDomino.map((f, i) => `<div class="carta" style="width:55px; height:85px; font-size:16px; justify-content:center;" onclick="jugarDomino(${i})">${f}</div>`).join('');
         }
         function jugarDomino(i) {
-            const mesa = document.getElementById('mesaDomino');
-            mesa.innerHTML += `<span style="font-size:28px;">${manoDomino[i]}</span>`;
-            manoDomino.splice(i, 1); renderDomino();
-            if (modoJuegoActual === 'bot') {
-                document.getElementById('infoDomino').innerText = "Bot jugando ficha...";
-                setTimeout(() => {
-                    let botFichas = ['🀸', '🀽', '🀵', '🀱'];
-                    let fBot = botFichas[Math.floor(Math.random() * botFichas.length)];
-                    mesa.innerHTML += `<span style="font-size:28px;">${fBot}</span>`;
-                    document.getElementById('infoDomino').innerText = `Bot jugó ${fBot}. Tu turno.`;
-                }, 600);
+            let ficha = manoDomino[i];
+            let match = ficha.match(/\[(\d)\|(\d)\]/);
+            if (!match) return;
+            let izq = parseInt(match[1]), der = parseInt(match[2]);
+
+            if (izq === mesaDominoExtremos[0] || der === mesaDominoExtremos[0] || izq === mesaDominoExtremos[1] || der === mesaDominoExtremos[1]) {
+                if (izq === mesaDominoExtremos[1]) mesaDominoExtremos[1] = der;
+                else if (der === mesaDominoExtremos[1]) mesaDominoExtremos[1] = izq;
+                else if (izq === mesaDominoExtremos[0]) mesaDominoExtremos[0] = der;
+                else if (der === mesaDominoExtremos[0]) mesaDominoExtremos[0] = izq;
+
+                manoDomino.splice(i, 1);
+                const mesa = document.getElementById('mesaDomino');
+                mesa.innerText = `Mesa: [${mesaDominoExtremos[0]}] === [${mesaDominoExtremos[1]}] (${ficha} jugada)`;
+                renderDomino();
+
+                if (manoDomino.length === 0) {
+                    document.getElementById('infoDomino').innerText = "¡Ganaste la partida de Dominó!";
+                    return;
+                }
+
+                if (modoJuegoActual === 'bot') {
+                    document.getElementById('infoDomino').innerText = "Bot jugando ficha...";
+                    setTimeout(() => {
+                        let botFicha = '[3|5]';
+                        mesaDominoExtremos[1] = 5;
+                        mesa.innerText = `Mesa: [${mesaDominoExtremos[0]}] === [${mesaDominoExtremos[1]}] (Bot jugó ${botFicha})`;
+                        document.getElementById('infoDomino').innerText = `Bot jugó ${botFicha}. Tu turno.`;
+                    }, 600);
+                }
+            } else {
+                document.getElementById('infoDomino').innerText = "Ficha no compatible con los extremos de la mesa.";
             }
         }
 
-        // 7. DAMAS (CON BOT IA MOVIENDO FICHAS ROJAS)
+        // 7. DAMAS
         let tabDamas = Array(64).fill(null);
         let selDamaIdx = null;
         function initDamas(area) {
@@ -720,7 +912,7 @@
                     }
                 }
             }
-            area.innerHTML += `<div class="grid-8x8" id="gDamas"></div><p id="infoDamas" style="margin-top:10px; font-size:13px;">Tu turno (⚪). Seleccioná una ficha blanca.</p>`;
+            area.innerHTML += `<div class="grid-8x8" id="gDamas"></div><p id="infoDamas" style="margin-top:10px; font-size:13px;">Tu turno (⚪). Seleccioná una ficha blanca para mover o comer.</p>`;
             renderDamas();
         }
         function renderDamas() {
@@ -737,35 +929,84 @@
         }
         function clickDamas(i) {
             if (turnoJugador !== 1) return;
+            let r = Math.floor(i / 8), c = i % 8;
             if (tabDamas[i] === '⚪') {
                 selDamaIdx = i; renderDamas();
-            } else if (selDamaIdx !== null && !tabDamas[i] && (Math.floor(i / 8) + i % 8) % 2 === 1) {
-                tabDamas[i] = '⚪'; tabDamas[selDamaIdx] = null; selDamaIdx = null;
-                renderDamas();
-                if (modoJuegoActual === 'bot') {
-                    turnoJugador = 2;
-                    document.getElementById('infoDamas').innerText = "Bot moviendo ficha roja...";
-                    setTimeout(botMoverDamas, 600);
+            } else if (selDamaIdx !== null && !tabDamas[i] && (r + c) % 2 === 1) {
+                let srcR = Math.floor(selDamaIdx / 8), srcC = selDamaIdx % 8;
+                let dr = r - srcR;
+                let dc = c - srcC;
+
+                if (Math.abs(dr) === 1 && Math.abs(dc) === 1) {
+                    tabDamas[i] = '⚪'; tabDamas[selDamaIdx] = null; selDamaIdx = null;
+                    finalizarTurnoDamas();
                 }
+                else if (Math.abs(dr) === 2 && Math.abs(dc) === 2) {
+                    let midR = (srcR + r) / 2;
+                    let midC = (srcC + c) / 2;
+                    let midIdx = midR * 8 + midC;
+                    if (tabDamas[midIdx] === '🔴') {
+                        tabDamas[i] = '⚪';
+                        tabDamas[selDamaIdx] = null;
+                        tabDamas[midIdx] = null;
+                        selDamaIdx = null;
+                        finalizarTurnoDamas();
+                    }
+                }
+            }
+        }
+        function finalizarTurnoDamas() {
+            renderDamas();
+            if (modoJuegoActual === 'bot') {
+                turnoJugador = 2;
+                document.getElementById('infoDamas').innerText = "Bot moviendo ficha roja...";
+                setTimeout(botMoverDamas, 600);
             }
         }
         function botMoverDamas() {
             let rojas = tabDamas.map((v, idx) => v === '🔴' ? idx : null).filter(v => v !== null);
             let movido = false;
+
             for (let src of rojas) {
-                let posibles = [src + 7, src + 9].filter(dest => dest < 64 && !tabDamas[dest] && (Math.floor(dest / 8) + dest % 8) % 2 === 1);
-                if (posibles.length > 0) {
-                    let dest = posibles[Math.floor(Math.random() * posibles.length)];
-                    tabDamas[dest] = '🔴'; tabDamas[src] = null;
-                    movido = true; break;
+                let srcR = Math.floor(src / 8), srcC = src % 8;
+                let targets = [{ r: srcR + 2, c: srcC + 2, midR: srcR + 1, midC: srcC + 1 }, { r: srcR + 2, c: srcC - 2, midR: srcR + 1, midC: srcC - 1 }];
+                for (let t of targets) {
+                    if (t.r >= 0 && t.r < 8 && t.c >= 0 && t.c < 8) {
+                        let dest = t.r * 8 + t.c;
+                        let mid = t.midR * 8 + t.midC;
+                        if (!tabDamas[dest] && tabDamas[mid] === '⚪') {
+                            tabDamas[dest] = '🔴';
+                            tabDamas[src] = null;
+                            tabDamas[mid] = null;
+                            movido = true;
+                            break;
+                        }
+                    }
+                }
+                if (movido) break;
+            }
+
+            if (!movido) {
+                for (let src of rojas) {
+                    let srcR = Math.floor(src / 8), srcC = src % 8;
+                    let posibles = [{ r: srcR + 1, c: srcC + 1 }, { r: srcR + 1, c: srcC - 1 }].filter(t => t.r >= 0 && t.r < 8 && t.c >= 0 && t.c < 8);
+                    let validDest = posibles.filter(t => !tabDamas[t.r * 8 + t.c]);
+                    if (validDest.length > 0) {
+                        let destCoord = validDest[Math.floor(Math.random() * validDest.length)];
+                        let dest = destCoord.r * 8 + destCoord.c;
+                        tabDamas[dest] = '🔴'; tabDamas[src] = null;
+                        movido = true;
+                        break;
+                    }
                 }
             }
+
             turnoJugador = 1;
-            document.getElementById('infoDamas').innerText = movido ? "Bot movió. Tu turno (⚪)." : "El Bot no tiene movimientos.";
+            document.getElementById('infoDamas').innerText = movido ? "Bot movió o capturó. Tu turno (⚪)." : "El Bot no tiene movimientos.";
             renderDamas();
         }
 
-        // 8. LUDO (TABLERO COMPLETO 15x15 VISUAL E INTERACTIVO)
+        // 8. LUDO
         let posLudoJ1 = 0, posLudoBot = 0;
         function initLudo(area) {
             posLudoJ1 = 0; posLudoBot = 0;
@@ -819,7 +1060,7 @@
             }
         }
 
-        // 9. TRUCO (CON IA INTERACTIVA)
+        // 9. TRUCO
         let ptsTrucoJ1 = 0, ptsTrucoBot = 0;
         function initTruco(area) {
             area.innerHTML += `
@@ -855,7 +1096,7 @@
             document.getElementById('infoTruco').innerText = `Cantaste: ${txt}. Bot dice: ¡Quiero!`;
         }
 
-        // 10. TUTE (CON BOT INTERACTIVO)
+        // 10. TUTE
         function initTute(area) {
             area.innerHTML += `
         <p style="font-size:12px; margin-bottom:10px;">Triunfo actual: 7 de Oro (🪙)</p>
@@ -882,7 +1123,7 @@
             }
         }
 
-        // 11. AJEDREZ (CON BOT MOVIENDO PIEZAS NEGRAS)
+        // 11. AJEDREZ
         let tabAjedrez = Array(64).fill(null);
         let selAjedrezIdx = null;
         function initAjedrez(area) {
@@ -932,12 +1173,10 @@
                 tabAjedrez[dest] = tabAjedrez[src]; tabAjedrez[src] = null;
             }
             turnoJugador = 1;
-            document.getElementById('infoAjedrez').innerText = "Bot realizó su jugada. Tu turno (Blancas).";
+            const infoAjedrez = document.getElementById('infoAjedrez');
+            if (infoAjedrez) infoAjedrez.innerText = "Bot realizó su jugada. Tu turno (Blancas).";
             renderAjedrez();
         }
-
-        // Inicialización al cargar la página
-        renderizarTableroActivo();
     </script>
 </body>
 
