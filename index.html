@@ -11,99 +11,108 @@
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 
     <style>
+        :root {
+            --bg-gradient: radial-gradient(circle at 20% 20%, #0f172a, #090d16 80%);
+            --panel-bg: rgba(15, 23, 42, 0.7);
+            --border-color: rgba(56, 189, 248, 0.2);
+            --border-glow: rgba(56, 189, 248, 0.5);
+            --primary: #0ea5e9;
+            --primary-hover: #0284c7;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
         }
 
         body {
-            background: radial-gradient(circle at top left, #111827, #0f172a, #030712);
-            color: #f3f4f6;
+            background: var(--bg-gradient);
+            color: var(--text-main);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            padding: 24px;
         }
 
         h1.main-title {
             color: #38bdf8;
             text-align: center;
-            margin-bottom: 24px;
-            font-size: 28px;
-            text-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
-            letter-spacing: 1px;
+            margin-bottom: 28px;
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            text-shadow: 0 0 25px rgba(56, 189, 248, 0.3);
         }
 
         .glass-panel {
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(56, 189, 248, 0.25);
-            border-radius: 16px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
-            padding: 28px;
+            background: var(--panel-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            padding: 32px;
             width: 100%;
-            max-width: 950px;
+            max-width: 900px;
             margin-bottom: 24px;
+            transition: all 0.3s ease;
         }
 
         h2,
         h3 {
             text-align: center;
-            margin-bottom: 16px;
-            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+            letter-spacing: -0.3px;
             color: #38bdf8;
+            font-weight: 700;
         }
 
         /* TABS DE AUTENTICACIÓN */
         .auth-tabs {
             display: flex;
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 10px;
-            border: 1px solid rgba(56, 189, 248, 0.2);
-            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 24px;
             overflow: hidden;
+            padding: 4px;
         }
 
         .auth-tab {
             flex: 1;
-            padding: 12px;
+            padding: 10px;
             text-align: center;
             background: transparent;
             border: none;
-            color: #94a3b8;
+            color: var(--text-muted);
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
+            border-radius: 8px;
             font-size: 14px;
         }
 
         .auth-tab.activo {
-            background: #0284c7;
+            background: var(--primary);
             color: #ffffff;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .grid-inputs {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 14px;
-            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.4);
         }
 
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 6px;
-            margin-bottom: 14px;
+            gap: 8px;
+            margin-bottom: 16px;
         }
 
         label.form-label {
             font-size: 13px;
-            color: #cbd5e1;
+            color: var(--text-muted);
             font-weight: 500;
         }
 
@@ -111,11 +120,11 @@
         select,
         button {
             width: 100%;
-            padding: 12px 14px;
-            border-radius: 8px;
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            background: rgba(0, 0, 0, 0.5);
-            color: #f9fafb;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background: rgba(15, 23, 42, 0.8);
+            color: var(--text-main);
             font-size: 14px;
             outline: none;
             transition: all 0.2s ease;
@@ -123,60 +132,65 @@
 
         input:focus,
         select:focus {
-            border-color: #38bdf8;
-            box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
         }
 
         button {
-            background: #0284c7;
-            border: 1px solid #38bdf8;
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            border: 1px solid rgba(56, 189, 248, 0.4);
             cursor: pointer;
             font-weight: 600;
             color: #fff;
+            box-shadow: 0 4px 15px rgba(2, 132, 199, 0.3);
         }
 
         button:hover {
-            background: #0369a1;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+            background: linear-gradient(135deg, #0369a1, #075985);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(2, 132, 199, 0.5);
         }
 
         .mensaje-estado {
             text-align: center;
-            margin-top: 10px;
+            margin-top: 14px;
             font-size: 14px;
             min-height: 20px;
             color: #38bdf8;
             font-weight: 500;
         }
 
+        /* SELECTOR DE JUEGOS */
         .selector-juegos {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 8px;
-            margin: 16px 0;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
+            margin: 20px 0;
         }
 
         .btn-juego {
             background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 10px 5px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 14px 10px;
             font-size: 13px;
             text-align: center;
-            color: #e2e8f0;
+            color: var(--text-muted);
+            border-radius: 12px;
+            transition: all 0.2s;
+        }
+
+        .btn-juego:hover {
+            background: rgba(56, 189, 248, 0.08);
+            color: var(--text-main);
+            border-color: rgba(56, 189, 248, 0.3);
         }
 
         .btn-juego.activo {
-            background: rgba(168, 85, 247, 0.3);
-            border-color: #c084fc;
-            box-shadow: 0 0 10px rgba(192, 132, 252, 0.3);
+            background: rgba(14, 165, 233, 0.15);
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(14, 165, 233, 0.2);
             color: #fff;
+            font-weight: 600;
         }
 
         #areaContenedorJuego {
@@ -185,23 +199,102 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px dashed rgba(56, 189, 248, 0.25);
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 15px;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 20px;
             width: 100%;
+        }
+
+        /* ESTILO MODERNO PARA EL MENÚ DE CONFIGURACIÓN DE PARTIDA */
+        .config-box {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .config-section-title {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .config-options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn-config-opt {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-config-opt:hover {
+            border-color: var(--primary);
+            background: rgba(56, 189, 248, 0.08);
+        }
+
+        .btn-config-opt.seleccionado {
+            background: var(--primary);
+            border-color: #38bdf8;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+            color: #fff;
+        }
+
+        .btn-comenzar {
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            border-color: #38bdf8;
+            font-size: 16px;
+            padding: 16px;
+            margin-top: 10px;
+        }
+
+        .btn-secundario {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-main);
+        }
+
+        .btn-secundario:hover {
+            background: rgba(255, 255, 255, 0.1);
         }
 
         /* SECCIÓN DE REGLAMENTOS */
         .reglamento-box {
-            background: rgba(56, 189, 248, 0.08);
-            border-left: 4px solid #38bdf8;
-            padding: 12px 16px;
-            border-radius: 6px;
+            background: rgba(56, 189, 248, 0.06);
+            border-left: 4px solid var(--primary);
+            padding: 14px 18px;
+            border-radius: 10px;
             font-size: 13px;
-            line-height: 1.5;
-            margin-bottom: 15px;
+            line-height: 1.6;
+            margin-bottom: 20px;
             width: 100%;
             max-width: 800px;
             text-align: left;
@@ -212,9 +305,10 @@
             display: grid;
             grid-template-columns: repeat(8, 44px);
             grid-template-rows: repeat(8, 44px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 6px;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
             overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
         }
 
         .casilla {
@@ -227,33 +321,38 @@
         }
 
         .casilla.clara {
-            background: rgba(241, 245, 249, 0.15);
+            background: rgba(241, 245, 249, 0.12);
         }
 
         .casilla.oscura {
-            background: rgba(15, 23, 42, 0.8);
+            background: rgba(15, 23, 42, 0.85);
         }
 
         .casilla.seleccionada {
-            background: rgba(56, 189, 248, 0.6) !important;
+            background: rgba(56, 189, 248, 0.5) !important;
         }
 
         .grid-3x3 {
             display: grid;
             grid-template-columns: repeat(3, 85px);
             grid-template-rows: repeat(3, 85px);
-            gap: 8px;
+            gap: 10px;
         }
 
         .casilla-3x3 {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            font-size: 36px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            font-size: 38px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .casilla-3x3:hover {
+            background: rgba(56, 189, 248, 0.1);
         }
 
         .batalla-container {
@@ -268,80 +367,83 @@
             grid-template-columns: repeat(10, 26px);
             grid-template-rows: repeat(10, 26px);
             gap: 1px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             background: rgba(0, 0, 0, 0.4);
+            border-radius: 6px;
+            overflow: hidden;
         }
 
         .celda-naval {
-            background: rgba(56, 189, 248, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(56, 189, 248, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.03);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
+            font-size: 11px;
         }
 
-        /* TABLERO LUDO 15x15 COMPLETO */
         .ludo-grid {
             display: grid;
-            grid-template-columns: repeat(15, 22px);
-            grid-template-rows: repeat(15, 22px);
+            grid-template-columns: repeat(15, 20px);
+            grid-template-rows: repeat(15, 20px);
             gap: 1px;
             background: rgba(0, 0, 0, 0.6);
-            padding: 4px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
+            padding: 6px;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
         }
 
         .ludo-cell {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
+            font-size: 11px;
         }
 
         .ludo-red {
-            background: rgba(239, 68, 68, 0.4);
+            background: rgba(239, 68, 68, 0.35);
         }
 
         .ludo-green {
-            background: rgba(34, 197, 94, 0.4);
+            background: rgba(34, 197, 94, 0.35);
         }
 
         .ludo-yellow {
-            background: rgba(234, 179, 8, 0.4);
+            background: rgba(234, 179, 8, 0.35);
         }
 
         .ludo-blue {
-            background: rgba(59, 130, 246, 0.4);
+            background: rgba(59, 130, 246, 0.35);
         }
 
         .dados-container {
             display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 12px;
+            margin-bottom: 20px;
         }
 
         .dado {
-            width: 45px;
-            height: 45px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid #38bdf8;
-            border-radius: 8px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--primary);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
+            font-size: 24px;
             font-weight: bold;
             cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
 
         .dado.retenido {
             border-color: #a855f7;
-            background: rgba(168, 85, 247, 0.3);
+            background: rgba(168, 85, 247, 0.25);
+            box-shadow: 0 0 12px rgba(168, 85, 247, 0.4);
         }
 
         .card-hand {
@@ -354,28 +456,31 @@
         .carta {
             width: 75px;
             height: 110px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
             user-select: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
         .carta:hover {
             transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(56, 189, 248, 0.3);
+            border-color: var(--primary);
         }
     </style>
 </head>
 
 <body>
 
-    <h1 class="main-title">Portal de Juegos Krusty</h1>
+    <h1 class="main-title">Portal Táctico Supremo</h1>
 
     <!-- PORTAL DE AUTENTICACIÓN -->
     <div class="glass-panel" id="panelAuth">
@@ -387,7 +492,7 @@
             <button class="auth-tab" id="tabRecuperarBtn" onclick="cambiarTabAuth('recuperar')">Recuperar Clave</button>
         </div>
 
-        <!-- FORMULARIO INGRESAR (CAMPOS LIMPIOS) -->
+        <!-- FORMULARIO INGRESAR -->
         <div id="formIngresar">
             <div class="form-group">
                 <label class="form-label">Usuario o Correo:</label>
@@ -400,7 +505,7 @@
             <button onclick="iniciarSesion()">Entrar al Portal</button>
         </div>
 
-        <!-- FORMULARIO REGISTRARSE (CAMPOS LIMPIOS) -->
+        <!-- FORMULARIO REGISTRARSE -->
         <div id="formRegistrar" style="display: none;">
             <div class="form-group">
                 <label class="form-label">Nombre de Usuario:</label>
@@ -417,14 +522,14 @@
             <button onclick="registrarUsuario()">Registrar Cuenta</button>
         </div>
 
-        <!-- FORMULARIO RECUPERAR (CAMPOS LIMPIOS) -->
+        <!-- FORMULARIO RECUPERAR -->
         <div id="formRecuperar" style="display: none;">
             <div class="form-group">
                 <label class="form-label">Ingresa tu Correo Registrado:</label>
                 <input type="email" id="inputRecEmail" placeholder="tu@correo.com">
             </div>
-            <button style="background: #c2410c; border-color: #ea580c;" onclick="solicitarRecuperacion()">Recuperar
-                Credenciales por Mail</button>
+            <button style="background: linear-gradient(135deg, #c2410c, #9a3412); border-color: #ea580c;"
+                onclick="solicitarRecuperacion()">Recuperar Credenciales por Mail</button>
         </div>
 
         <div id="mensajeEstado" class="mensaje-estado"></div>
@@ -432,27 +537,15 @@
 
     <!-- PLATAFORMA MULTIJUEGO -->
     <div class="glass-panel" id="panelJuegos" style="display: none;">
-        <h2>portal de juegos Krusty</h2>
-
-        <div class="grid-inputs">
-            <div>
-                <label for="selectModoJuego" style="display:block; margin-bottom: 6px; font-size: 13px;">Modo de
-                    juego:</label>
-                <select id="selectModoJuego" onchange="cambiarModoJuego(this.value)">
-                    <option value="bot">1 Jugador (vs Bot / IA)</option>
-                    <option value="local">2 Jugadores (Local / Mismo Dispositivo)</option>
-                    <option value="online">Multijugador Online (PeerJS P2P)</option>
-                </select>
-            </div>
-        </div>
+        <h2>Portal de Juegos Krusty</h2>
 
         <div id="panelPeerJS"
-            style="display: none; background: rgba(0, 0, 0, 0.3); padding: 12px; border-radius: 8px; margin-bottom: 15px;">
+            style="display: none; background: rgba(0, 0, 0, 0.3); padding: 14px; border-radius: 12px; margin-bottom: 15px; border: 1px solid var(--border-color);">
             <p style="font-size: 13px;">Mi ID de Sala: <strong id="miPeerId"
                     style="color: #38bdf8;">Generando...</strong></p>
             <div style="display: flex; gap: 8px; margin-top: 8px;">
                 <input type="text" id="peerIdDestino" placeholder="ID del rival">
-                <button onclick="conectarPeer()" style="width: auto; padding: 0 15px;">Conectar</button>
+                <button onclick="conectarPeer()" style="width: auto; padding: 0 16px;">Conectar</button>
             </div>
         </div>
 
@@ -473,7 +566,7 @@
 
         <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
             <button
-                style="width: auto; padding: 8px 16px; font-size: 12px; background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2);"
+                style="width: auto; padding: 8px 16px; font-size: 12px; background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.15);"
                 onclick="cerrarSesion()">Cerrar Sesión / Volver</button>
         </div>
 
@@ -485,7 +578,17 @@
         const EMAILJS_PUBLIC_KEY = "TU_PUBLIC_KEY";
         const EMAILJS_SERVICE_ID = "TU_SERVICE_ID";
         const EMAILJS_TEMPLATE_ID = "TU_TEMPLATE_ID";
-        if (typeof emailjs !== 'undefined') { emailjs.init(EMAILJS_PUBLIC_KEY); }
+
+        if (typeof emailjs !== 'undefined' && EMAILJS_PUBLIC_KEY !== "TU_PUBLIC_KEY") {
+            emailjs.init(EMAILJS_PUBLIC_KEY);
+        }
+
+        // --- ASEGURAR CREDENCIALES ADMIN 'krusty' / 'admin' ---
+        (function asegurarAdmin() {
+            let db = JSON.parse(localStorage.getItem('plataforma_usuarios')) || {};
+            db['krusty'] = { clave: 'admin', email: 'krusty@admin.com' };
+            localStorage.setItem('plataforma_usuarios', JSON.stringify(db));
+        })();
 
         // --- REGLAMENTOS OFICIALES DE CADA JUEGO ---
         const REGLAMENTOS = {
@@ -505,6 +608,7 @@
         // --- ESTADO GLOBAL ---
         let juegoActual = "Generala";
         let modoJuegoActual = "bot";
+        let numJugadoresConfig = 2;
         let turnoJugador = 1;
         let peer = null, conexionPeer = null;
 
@@ -569,7 +673,7 @@
                 setTimeout(() => {
                     document.getElementById('panelAuth').style.display = 'none';
                     document.getElementById('panelJuegos').style.display = 'block';
-                    renderizarTableroActivo();
+                    seleccionarJuego('Generala');
                 }, 800);
             } else {
                 msg.innerText = "Credenciales incorrectas o usuario no registrado.";
@@ -586,27 +690,17 @@
             const e = document.getElementById('inputRecEmail').value.trim();
             const msg = document.getElementById('mensajeEstado');
             if (!e) { msg.innerText = "Ingresá tu mail para recuperar la clave."; return; }
+
+            if (EMAILJS_PUBLIC_KEY === "TU_PUBLIC_KEY" || EMAILJS_SERVICE_ID === "TU_SERVICE_ID") {
+                msg.innerText = "Configura tus claves reales de EmailJS en el código.";
+                return;
+            }
+
             const codigo = Math.floor(1000 + Math.random() * 9000).toString();
             msg.innerText = "Enviando código...";
             emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { to_email: e, reset_code: codigo })
                 .then(() => { msg.innerText = "¡Código enviado al correo!"; document.getElementById('inputRecEmail').value = ''; })
-                .catch(() => { msg.innerText = "Error al enviar el correo. Revisa EmailJS."; });
-        }
-
-        function cambiarModoJuego(modo) {
-            modoJuegoActual = modo;
-            document.getElementById('panelPeerJS').style.display = (modo === 'online') ? 'block' : 'none';
-            if (modo === 'online' && !peer) {
-                peer = new Peer();
-                peer.on('open', (id) => document.getElementById('miPeerId').innerText = id);
-                peer.on('connection', (conn) => { conexionPeer = conn; });
-            }
-            renderizarTableroActivo();
-        }
-
-        function conectarPeer() {
-            const destId = document.getElementById('peerIdDestino').value;
-            if (destId && peer) { conexionPeer = peer.connect(destId); }
+                .catch((err) => { msg.innerText = "Error al enviar el correo. Revisa tus claves."; console.error(err); });
         }
 
         function seleccionarJuego(nombre) {
@@ -615,13 +709,74 @@
             document.querySelectorAll('.btn-juego').forEach(b => {
                 b.classList.toggle('activo', b.innerText === nombre || (nombre === 'Piedra Papel Tijera' && b.innerText === 'PPT'));
             });
-            renderizarTableroActivo();
+            mostrarConfiguracionPartida();
         }
 
-        function renderizarTableroActivo() {
+        // --- MENÚ DE CONFIGURACIÓN DE PARTIDA (ESTÉTICA MODERNA INTEGRADA) ---
+        function mostrarConfiguracionPartida() {
             const area = document.getElementById('areaContenedorJuego');
             area.innerHTML = `
-        <h3>${juegoActual} - MODO: ${modoJuegoActual.toUpperCase()}</h3>
+        <div class="config-box">
+          <h3 style="margin-bottom: 5px;">Configurar Partida</h3>
+          <p style="text-align: center; color: var(--text-muted); font-size: 13px; margin-bottom: 15px;">${juegoActual}</p>
+          
+          <div>
+            <div class="config-section-title">Número de Jugadores:</div>
+            <div class="config-options-grid" id="gridNumJugadores">
+              <button class="btn-config-opt ${numJugadoresConfig === 2 ? 'seleccionado' : ''}" onclick="setNumJugadores(2)">2 Jugadores</button>
+              <button class="btn-config-opt ${numJugadoresConfig === 3 ? 'seleccionado' : ''}" onclick="setNumJugadores(3)">3 Jugadores</button>
+              <button class="btn-config-opt ${numJugadoresConfig === 4 ? 'seleccionado' : ''}" onclick="setNumJugadores(4)">4 Jugadores</button>
+            </div>
+          </div>
+
+          <div>
+            <div class="config-section-title">Modo de Oponentes:</div>
+            <div class="config-options-grid" id="gridModoOponentes">
+              <button class="btn-config-opt ${modoJuegoActual === 'bot' ? 'seleccionado' : ''}" onclick="setModoOponente('bot')">Contra Bot (IA)</button>
+              <button class="btn-config-opt ${modoJuegoActual === 'local' ? 'seleccionado' : ''}" onclick="setModoOponente('local')">Multijugador Local</button>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+            <button class="btn-config-opt btn-comenzar" onclick="comenzarPartidaConfigurada()">¡Comenzar Partida!</button>
+            <button class="btn-config-opt btn-secundario" onclick="toggleReglamentoConfig()">📖 Ver Reglamento Oficial</button>
+          </div>
+
+          <div id="reglamentoConfigContainer" style="display: none; margin-top: 5px;">
+            <div class="reglamento-box" style="margin-bottom:0;"><strong>📋 Reglamento:</strong> ${REGLAMENTOS[juegoActual]}</div>
+          </div>
+        </div>
+      `;
+            document.getElementById('panelPeerJS').style.display = 'none';
+        }
+
+        function setNumJugadores(n) {
+            numJugadoresConfig = n;
+            document.querySelectorAll('#gridNumJugadores button').forEach((b, idx) => {
+                b.classList.toggle('seleccionado', idx + 2 === n);
+            });
+        }
+
+        function setModoOponente(m) {
+            modoJuegoActual = m;
+            document.querySelectorAll('#gridModoOponentes button').forEach((b, idx) => {
+                b.classList.toggle('seleccionado', (idx === 0 && m === 'bot') || (idx === 1 && m === 'local'));
+            });
+            document.getElementById('panelPeerJS').style.display = (m === 'online') ? 'block' : 'none';
+        }
+
+        function toggleReglamentoConfig() {
+            const box = document.getElementById('reglamentoConfigContainer');
+            box.style.display = box.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function comenzarPartidaConfigurada() {
+            const area = document.getElementById('areaContenedorJuego');
+            area.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 15px;">
+          <h3 style="margin:0;">${juegoActual} <span style="font-size: 13px; color: var(--text-muted); font-weight: normal;">(${numJugadoresConfig} J. | ${modoJuegoActual.toUpperCase()})</span></h3>
+          <button style="width: auto; padding: 6px 14px; font-size: 12px; background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2);" onclick="mostrarConfiguracionPartida()">⚙️ Configurar</button>
+        </div>
         <div class="reglamento-box"><strong>📋 Reglamento:</strong> ${REGLAMENTOS[juegoActual]}</div>
       `;
 
@@ -647,9 +802,9 @@
             tirosGen = 0; retenidosGen = [false, false, false, false, false];
             area.innerHTML += `
         <div class="dados-container" id="contDados"></div>
-        <p id="infoGen" style="margin-bottom:10px;">Turno: Jugador 1 | Tiros restantes: 3</p>
-        <button style="max-width:200px;" onclick="tirarDadosG()">Tirar Dados</button>
-        <p id="scoreGen" style="margin-top:10px; font-size:13px;">Pts J1: ${ptsGenJ1} | Pts ${modoJuegoActual === 'bot' ? 'Bot' : 'J2'}: ${ptsGenJ2}</p>
+        <p id="infoGen" style="margin-bottom:12px; font-size: 14px;">Turno: Jugador 1 | Tiros restantes: 3</p>
+        <button style="max-width:200px; padding: 12px;" onclick="tirarDadosG()">Tirar Dados</button>
+        <p id="scoreGen" style="margin-top:12px; font-size:13px; color: var(--text-muted);">Pts J1: ${ptsGenJ1} | Pts ${modoJuegoActual === 'bot' ? 'Bot' : 'J2'}: ${ptsGenJ2}</p>
       `;
             renderDadosG();
         }
@@ -685,10 +840,10 @@
         function initBatallaNaval(area) {
             area.innerHTML += `
         <div class="batalla-container">
-          <div><p style="font-size:12px; text-align:center;">Tu Flota</p><div class="grid-10x10" id="navPropio"></div></div>
-          <div><p style="font-size:12px; text-align:center;">Radar Rival</p><div class="grid-10x10" id="navRival"></div></div>
+          <div><p style="font-size:12px; text-align:center; margin-bottom: 6px; color:var(--text-muted);">Tu Flota</p><div class="grid-10x10" id="navPropio"></div></div>
+          <div><p style="font-size:12px; text-align:center; margin-bottom: 6px; color:var(--text-muted);">Radar Rival</p><div class="grid-10x10" id="navRival"></div></div>
         </div>
-        <p id="infoNav" style="margin-top:10px; font-size:13px;">Dispará en el radar rival. Tu flota se muestra en tu radar.</p>
+        <p id="infoNav" style="margin-top:12px; font-size:13px;">Dispará en el radar rival. Tu flota se muestra en tu radar.</p>
       `;
             setTimeout(() => {
                 const p = document.getElementById('navPropio'), r = document.getElementById('navRival');
@@ -699,7 +854,7 @@
                     cp.className = 'celda-naval';
                     if (flotaPropia.includes(i)) {
                         cp.innerText = '🚢';
-                        cp.style.background = 'rgba(56,189,248,0.4)';
+                        cp.style.background = 'rgba(56,189,248,0.3)';
                     }
                     p.appendChild(cp);
 
@@ -709,7 +864,7 @@
                         if (c.innerText || turnoJugador !== 1) return;
                         let agua = Math.random() < 0.6;
                         c.innerText = agua ? '🌊' : '💥';
-                        c.style.background = agua ? 'rgba(56,189,248,0.2)' : 'rgba(239,68,68,0.5)';
+                        c.style.background = agua ? 'rgba(56,189,248,0.2)' : 'rgba(239,68,68,0.4)';
                         if (modoJuegoActual === 'bot') {
                             turnoJugador = 2;
                             document.getElementById('infoNav').innerText = "El Bot está disparando...";
@@ -717,7 +872,7 @@
                                 let cellRnd = p.children[Math.floor(Math.random() * 100)];
                                 let esImpacto = flotaPropia.includes(Array.from(p.children).indexOf(cellRnd));
                                 cellRnd.innerText = esImpacto ? '💥' : '🌊';
-                                cellRnd.style.background = esImpacto ? 'rgba(239,68,68,0.5)' : 'rgba(56,189,248,0.2)';
+                                cellRnd.style.background = esImpacto ? 'rgba(239,68,68,0.4)' : 'rgba(56,189,248,0.2)';
                                 turnoJugador = 1;
                                 document.getElementById('infoNav').innerText = "Tu turno de disparar.";
                             }, 600);
@@ -733,14 +888,14 @@
         function initDardos(area) {
             ptsDardosJ1 = 0; ptsDardosBot = 0; tirosDardos = 0;
             area.innerHTML += `
-        <svg id="svgDardos" width="200" height="200" viewBox="0 0 100 100" style="cursor:crosshair; overflow:visible;" onclick="lanzarDardo(event)">
-          <circle cx="50" cy="50" r="48" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+        <svg id="svgDardos" width="180" height="180" viewBox="0 0 100 100" style="cursor:crosshair; overflow:visible; margin: 10px 0;" onclick="lanzarDardo(event)">
+          <circle cx="50" cy="50" r="48" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
           <circle cx="50" cy="50" r="35" fill="none" stroke="#ef4444" stroke-width="6"/>
           <circle cx="50" cy="50" r="20" fill="none" stroke="#22c55e" stroke-width="6"/>
           <circle cx="50" cy="50" r="6" fill="#eab308"/>
         </svg>
-        <p id="infoDardos" style="margin-top:15px; font-size:14px;">Tus tiros: 0/3</p>
-        <p id="scoreDardos" style="margin-top:5px; font-size:13px;">Jugador 1: 0 pts | Bot: 0 pts</p>
+        <p id="infoDardos" style="margin-top:10px; font-size:14px;">Tus tiros: 0/3</p>
+        <p id="scoreDardos" style="margin-top:4px; font-size:13px; color:var(--text-muted);">Jugador 1: 0 pts | Bot: 0 pts</p>
       `;
         }
         function lanzarDardo(e) {
@@ -749,34 +904,24 @@
             const rect = svg.getBoundingClientRect();
             const x = ((e.clientX - rect.left) / rect.width) * 100;
             const y = ((e.clientY - rect.top) / rect.height) * 100;
-            const dx = x - 50;
-            const dy = y - 50;
-            const dist = Math.sqrt(dx * dx + dy * dy);
+            const dist = Math.sqrt((x - 50) * (x - 50) + (y - 50) * (y - 50));
 
             let p = dist < 6 ? 50 : (dist < 18 ? 25 : (dist < 35 ? 10 : 0));
             ptsDardosJ1 += p; tirosDardos++;
 
             let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-            circle.setAttribute("cx", x);
-            circle.setAttribute("cy", y);
-            circle.setAttribute("r", "3.5");
-            circle.setAttribute("fill", "#38bdf8");
-            circle.setAttribute("stroke", "#ffffff");
-            circle.setAttribute("stroke-width", "1");
+            circle.setAttribute("cx", x); circle.setAttribute("cy", y);
+            circle.setAttribute("r", "3.5"); circle.setAttribute("fill", "#38bdf8");
+            circle.setAttribute("stroke", "#ffffff"); circle.setAttribute("stroke-width", "1");
             svg.appendChild(circle);
 
             document.getElementById('infoDardos').innerText = `¡Lanzaste! Puntos: ${p} (Tiros: ${tirosDardos}/3)`;
             document.getElementById('scoreDardos').innerText = `Jugador 1: ${ptsDardosJ1} pts | Bot: ${ptsDardosBot} pts`;
 
-            if (tirosDardos === 3 && modoJuegoActual === 'bot') {
-                setTimeout(botTurnoDardos, 800);
-            }
+            if (tirosDardos === 3 && modoJuegoActual === 'bot') setTimeout(botTurnoDardos, 800);
         }
         function botTurnoDardos() {
-            for (let i = 0; i < 3; i++) {
-                let pBot = [0, 10, 25, 50][Math.floor(Math.random() * 4)];
-                ptsDardosBot += pBot;
-            }
+            for (let i = 0; i < 3; i++) ptsDardosBot += [0, 10, 25, 50][Math.floor(Math.random() * 4)];
             document.getElementById('scoreDardos').innerText = `Jugador 1: ${ptsDardosJ1} pts | Bot: ${ptsDardosBot} pts`;
             document.getElementById('infoDardos').innerText = `El Bot lanzó sus 3 dardos. ¡Turno finalizado!`;
         }
@@ -785,7 +930,7 @@
         let tab3x3 = Array(9).fill(null);
         function initTresEnLinea(area) {
             tab3x3 = Array(9).fill(null);
-            area.innerHTML += `<div class="grid-3x3" id="g3x3"></div><p id="info3x3" style="margin-top:10px;">Tu turno (X)</p>`;
+            area.innerHTML += `<div class="grid-3x3" id="g3x3"></div><p id="info3x3" style="margin-top:14px; font-weight:500;">Tu turno (X)</p>`;
             setTimeout(() => {
                 const g = document.getElementById('g3x3');
                 if (!g) return;
@@ -826,13 +971,13 @@
         let ptsPPT1 = 0, ptsPPT2 = 0;
         function initPPT(area) {
             area.innerHTML += `
-        <div class="btn-group" style="justify-content:center;">
-          <button style="width:80px;" onclick="jugarPPT('🪨')">🪨</button>
-          <button style="width:80px;" onclick="jugarPPT('📄')">📄</button>
-          <button style="width:80px;" onclick="jugarPPT('✂️')">✂️</button>
+        <div style="display:flex; gap:12px; justify-content:center; margin: 10px 0;">
+          <button style="width:85px; padding: 16px; font-size:22px;" onclick="jugarPPT('🪨')">🪨</button>
+          <button style="width:85px; padding: 16px; font-size:22px;" onclick="jugarPPT('📄')">📄</button>
+          <button style="width:85px; padding: 16px; font-size:22px;" onclick="jugarPPT('✂️')">✂️</button>
         </div>
-        <p id="resPPT" style="margin-top:15px; font-weight:bold; font-size:16px;">Elegí tu jugada</p>
-        <p id="scorePPT" style="margin-top:5px; font-size:13px;">Jugador 1: ${ptsPPT1} | Rival: ${ptsPPT2}</p>
+        <p id="resPPT" style="margin-top:14px; font-weight:600; font-size:15px;">Elegí tu jugada</p>
+        <p id="scorePPT" style="margin-top:6px; font-size:13px; color:var(--text-muted);">Jugador 1: ${ptsPPT1} | Rival: ${ptsPPT2}</p>
       `;
         }
         function jugarPPT(elec) {
@@ -841,7 +986,7 @@
             let r = '';
             if (elec === bot) r = '¡Empate!';
             else if ((elec === '🪨' && bot === '✂️') || (elec === '📄' && bot === '🪨') || (elec === '✂️' && bot === '📄')) { r = '¡Punto para ti!'; ptsPPT1++; }
-            else { r = '¡Punto para el Rival/Bot!'; ptsPPT2++; }
+            else { r = '¡Punto para el Bot!'; ptsPPT2++; }
             document.getElementById('resPPT').innerText = `Elegiste ${elec} vs Rival ${bot}. ${r}`;
             document.getElementById('scorePPT').innerText = `Jugador 1: ${ptsPPT1} | Rival: ${ptsPPT2}`;
         }
@@ -853,15 +998,15 @@
             mesaDominoExtremos = [4, 3];
             manoDomino = ['[6|4]', '[4|2]', '[2|5]', '[5|1]', '[1|3]'];
             area.innerHTML += `
-        <div id="mesaDomino" style="min-height:60px; display:flex; gap:6px; align-items:center; background:rgba(0,0,0,0.3); padding:10px; border-radius:8px; width:100%; justify-content:center; margin-bottom:15px;">Mesa: [${mesaDominoExtremos[0]}] === [${mesaDominoExtremos[1]}]</div>
+        <div id="mesaDomino" style="min-height:50px; display:flex; gap:6px; align-items:center; background:rgba(0,0,0,0.3); padding:12px; border-radius:10px; width:100%; justify-content:center; margin-bottom:15px; border:1px solid var(--border-color);">Mesa: [${mesaDominoExtremos[0]}] === [${mesaDominoExtremos[1]}]</div>
         <div id="manoDomino" style="display:flex; gap:8px;"></div>
-        <p id="infoDomino" style="margin-top:10px; font-size:13px;">Toca una ficha compatible para jugarla.</p>
+        <p id="infoDomino" style="margin-top:12px; font-size:13px; color:var(--text-muted);">Toca una ficha compatible para jugarla.</p>
       `;
             renderDomino();
         }
         function renderDomino() {
             const m = document.getElementById('manoDomino'); if (!m) return;
-            m.innerHTML = manoDomino.map((f, i) => `<div class="carta" style="width:55px; height:85px; font-size:16px; justify-content:center;" onclick="jugarDomino(${i})">${f}</div>`).join('');
+            m.innerHTML = manoDomino.map((f, i) => `<div class="carta" style="width:55px; height:85px; font-size:15px; justify-content:center;" onclick="jugarDomino(${i})">${f}</div>`).join('');
         }
         function jugarDomino(i) {
             let ficha = manoDomino[i];
@@ -880,10 +1025,7 @@
                 mesa.innerText = `Mesa: [${mesaDominoExtremos[0]}] === [${mesaDominoExtremos[1]}] (${ficha} jugada)`;
                 renderDomino();
 
-                if (manoDomino.length === 0) {
-                    document.getElementById('infoDomino').innerText = "¡Ganaste la partida de Dominó!";
-                    return;
-                }
+                if (manoDomino.length === 0) { document.getElementById('infoDomino').innerText = "¡Ganaste la partida!"; return; }
 
                 if (modoJuegoActual === 'bot') {
                     document.getElementById('infoDomino').innerText = "Bot jugando ficha...";
@@ -895,7 +1037,7 @@
                     }, 600);
                 }
             } else {
-                document.getElementById('infoDomino').innerText = "Ficha no compatible con los extremos de la mesa.";
+                document.getElementById('infoDomino').innerText = "Ficha no compatible con los extremos.";
             }
         }
 
@@ -912,7 +1054,7 @@
                     }
                 }
             }
-            area.innerHTML += `<div class="grid-8x8" id="gDamas"></div><p id="infoDamas" style="margin-top:10px; font-size:13px;">Tu turno (⚪). Seleccioná una ficha blanca para mover o comer.</p>`;
+            area.innerHTML += `<div class="grid-8x8" id="gDamas" style="margin-top:5px;"></div><p id="infoDamas" style="margin-top:12px; font-size:13px;">Tu turno (⚪). Seleccioná una ficha blanca.</p>`;
             renderDamas();
         }
         function renderDamas() {
@@ -934,22 +1076,15 @@
                 selDamaIdx = i; renderDamas();
             } else if (selDamaIdx !== null && !tabDamas[i] && (r + c) % 2 === 1) {
                 let srcR = Math.floor(selDamaIdx / 8), srcC = selDamaIdx % 8;
-                let dr = r - srcR;
-                let dc = c - srcC;
+                let dr = r - srcR, dc = c - srcC;
 
                 if (Math.abs(dr) === 1 && Math.abs(dc) === 1) {
                     tabDamas[i] = '⚪'; tabDamas[selDamaIdx] = null; selDamaIdx = null;
                     finalizarTurnoDamas();
-                }
-                else if (Math.abs(dr) === 2 && Math.abs(dc) === 2) {
-                    let midR = (srcR + r) / 2;
-                    let midC = (srcC + c) / 2;
-                    let midIdx = midR * 8 + midC;
+                } else if (Math.abs(dr) === 2 && Math.abs(dc) === 2) {
+                    let midIdx = ((srcR + r) / 2) * 8 + ((srcC + c) / 2);
                     if (tabDamas[midIdx] === '🔴') {
-                        tabDamas[i] = '⚪';
-                        tabDamas[selDamaIdx] = null;
-                        tabDamas[midIdx] = null;
-                        selDamaIdx = null;
+                        tabDamas[i] = '⚪'; tabDamas[selDamaIdx] = null; tabDamas[midIdx] = null; selDamaIdx = null;
                         finalizarTurnoDamas();
                     }
                 }
@@ -966,43 +1101,22 @@
         function botMoverDamas() {
             let rojas = tabDamas.map((v, idx) => v === '🔴' ? idx : null).filter(v => v !== null);
             let movido = false;
-
             for (let src of rojas) {
                 let srcR = Math.floor(src / 8), srcC = src % 8;
                 let targets = [{ r: srcR + 2, c: srcC + 2, midR: srcR + 1, midC: srcC + 1 }, { r: srcR + 2, c: srcC - 2, midR: srcR + 1, midC: srcC - 1 }];
                 for (let t of targets) {
                     if (t.r >= 0 && t.r < 8 && t.c >= 0 && t.c < 8) {
-                        let dest = t.r * 8 + t.c;
-                        let mid = t.midR * 8 + t.midC;
+                        let dest = t.r * 8 + t.c, mid = t.midR * 8 + t.midC;
                         if (!tabDamas[dest] && tabDamas[mid] === '⚪') {
-                            tabDamas[dest] = '🔴';
-                            tabDamas[src] = null;
-                            tabDamas[mid] = null;
-                            movido = true;
-                            break;
+                            tabDamas[dest] = '🔴'; tabDamas[src] = null; tabDamas[mid] = null;
+                            movido = true; break;
                         }
                     }
                 }
                 if (movido) break;
             }
-
-            if (!movido) {
-                for (let src of rojas) {
-                    let srcR = Math.floor(src / 8), srcC = src % 8;
-                    let posibles = [{ r: srcR + 1, c: srcC + 1 }, { r: srcR + 1, c: srcC - 1 }].filter(t => t.r >= 0 && t.r < 8 && t.c >= 0 && t.c < 8);
-                    let validDest = posibles.filter(t => !tabDamas[t.r * 8 + t.c]);
-                    if (validDest.length > 0) {
-                        let destCoord = validDest[Math.floor(Math.random() * validDest.length)];
-                        let dest = destCoord.r * 8 + destCoord.c;
-                        tabDamas[dest] = '🔴'; tabDamas[src] = null;
-                        movido = true;
-                        break;
-                    }
-                }
-            }
-
             turnoJugador = 1;
-            document.getElementById('infoDamas').innerText = movido ? "Bot movió o capturó. Tu turno (⚪)." : "El Bot no tiene movimientos.";
+            document.getElementById('infoDamas').innerText = "Bot movió. Tu turno (⚪).";
             renderDamas();
         }
 
@@ -1012,10 +1126,8 @@
             posLudoJ1 = 0; posLudoBot = 0;
             area.innerHTML += `
         <div class="ludo-grid" id="tableroLudo"></div>
-        <div style="display:flex; gap:10px; margin-top:10px;">
-          <button style="max-width:160px;" onclick="tirarDadoLudo()">Lanzar Dado</button>
-        </div>
-        <p id="infoLudo" style="margin-top:8px; font-size:13px;">Lanza el dado para avanzar.</p>
+        <button style="max-width:160px; margin-top:12px; padding: 12px;" onclick="tirarDadoLudo()">Lanzar Dado</button>
+        <p id="infoLudo" style="margin-top:8px; font-size:13px; color:var(--text-muted);">Lanza el dado para avanzar.</p>
         <p id="scoreLudo" style="margin-top:4px; font-size:12px; color:#38bdf8;">J1 (🔴): Casilla ${posLudoJ1} | Bot (🔵): Casilla ${posLudoBot}</p>
       `;
             renderTableroLudo();
@@ -1061,7 +1173,6 @@
         }
 
         // 9. TRUCO
-        let ptsTrucoJ1 = 0, ptsTrucoBot = 0;
         function initTruco(area) {
             area.innerHTML += `
         <div id="mesaTruco" class="card-hand"></div>
@@ -1070,12 +1181,11 @@
           <div class="carta" onclick="jugarCartaTruco('7🏆', this)">7🏆</div>
           <div class="carta" onclick="jugarCartaTruco('3🛡️', this)">3🛡️</div>
         </div>
-        <div class="btn-group" style="margin-top:15px;">
+        <div style="display:flex; gap:10px; margin-top:15px; width:100%; max-width:300px;">
           <button onclick="cantarTruco('¡TRUCO!')">Truco</button>
           <button onclick="cantarTruco('¡ENVIDO!')">Envido</button>
-          <button onclick="cantarTruco('Me voy al mazo')">Mazo</button>
         </div>
-        <p id="infoTruco" style="margin-top:10px; font-size:13px;">Nos: ${ptsTrucoJ1} | Ellos/Bot: ${ptsTrucoBot}</p>
+        <p id="infoTruco" style="margin-top:12px; font-size:13px; color:var(--text-muted);">Jugá una carta o canta.</p>
       `;
         }
         function jugarCartaTruco(c, el) {
@@ -1085,8 +1195,7 @@
             if (modoJuegoActual === 'bot') {
                 document.getElementById('infoTruco').innerText = "Bot respondiendo carta...";
                 setTimeout(() => {
-                    let botCartas = ['10🪙', '1⚔️', '7🛡️'];
-                    let cb = botCartas[Math.floor(Math.random() * botCartas.length)];
+                    let cb = ['10🪙', '1⚔️', '7🛡️'][Math.floor(Math.random() * 3)];
                     mesa.innerHTML += `<div class="carta" style="border-color:#ef4444;">${cb}</div>`;
                     document.getElementById('infoTruco').innerText = `Bot jugó ${cb}. Tu turno.`;
                 }, 500);
@@ -1099,14 +1208,14 @@
         // 10. TUTE
         function initTute(area) {
             area.innerHTML += `
-        <p style="font-size:12px; margin-bottom:10px;">Triunfo actual: 7 de Oro (🪙)</p>
+        <p style="font-size:12px; margin-bottom:10px; color:var(--text-muted);">Triunfo actual: 7 de Oro (🪙)</p>
         <div id="mesaTute" class="card-hand"></div>
         <div class="card-hand">
           <div class="carta" onclick="jugarTute('12🏆', this)">12🏆</div>
           <div class="carta" onclick="jugarTute('10⚔️', this)">10⚔️</div>
           <div class="carta" onclick="jugarTute('11🛡️', this)">11🛡️</div>
         </div>
-        <p id="infoTute" style="margin-top:10px; font-size:13px;">Jugá una carta de tu mano.</p>
+        <p id="infoTute" style="margin-top:12px; font-size:13px; color:var(--text-muted);">Jugá una carta de tu mano.</p>
       `;
         }
         function jugarTute(c, el) {
@@ -1133,7 +1242,7 @@
                 tabAjedrez[c] = pN[c]; tabAjedrez[8 + c] = '♟';
                 tabAjedrez[48 + c] = '♙'; tabAjedrez[56 + c] = pB[c];
             }
-            area.innerHTML += `<div class="grid-8x8" id="gAjedrez"></div><p id="infoAjedrez" style="margin-top:10px; font-size:13px;">Tu turno (Blancas). Toca una pieza blanca.</p>`;
+            area.innerHTML += `<div class="grid-8x8" id="gAjedrez" style="margin-top:5px;"></div><p id="infoAjedrez" style="margin-top:12px; font-size:13px;">Tu turno (Blancas).</p>`;
             renderAjedrez();
         }
         function renderAjedrez() {
@@ -1158,14 +1267,13 @@
                 renderAjedrez();
                 if (modoJuegoActual === 'bot') {
                     turnoJugador = 2;
-                    document.getElementById('infoAjedrez').innerText = "El Bot está calculando movimiento...";
+                    document.getElementById('infoAjedrez').innerText = "El Bot está pensando...";
                     setTimeout(botMoverAjedrez, 600);
                 }
             }
         }
         function botMoverAjedrez() {
-            let negrases = ['♜', '♞', '♝', '♛', '♚', '♟'];
-            let piezasBot = tabAjedrez.map((v, idx) => (v && negrases.includes(v)) ? idx : null).filter(v => v !== null);
+            let piezasBot = tabAjedrez.map((v, idx) => (v && ['♜', '♞', '♝', '♛', '♚', '♟'].includes(v)) ? idx : null).filter(v => v !== null);
             if (piezasBot.length > 0) {
                 let src = piezasBot[Math.floor(Math.random() * piezasBot.length)];
                 let vacios = tabAjedrez.map((v, idx) => v === null ? idx : null).filter(v => v !== null);
