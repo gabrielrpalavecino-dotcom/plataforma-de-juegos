@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🕹️ Portal de Juegos Krusty - Edición Completa Suprema</title>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function () { emailjs.init("YOUR_PUBLIC_KEY"); })();
+    </script>
+
+    <style>
+        :root {
+            --arcade-bg: #000000;
+            --arcade-card: #0d0d0d;
+            --arcade-border: #f8b800;
+            --arcade-green: #00ff66;
+            --arcade-cyan: #00ffff;
+            --arcade-red: #ff3333;
+            --arcade-text: #ffffff;
+            --arcade-muted: #888888;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        /* --- ESTILO TECLA RETRO DE LUZ (ATARI 128 / USUARIO COMÚN) --- */
+        .retro-switch-container {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 6px 0;
+        }
+
+        .retro-switch {
+            position: relative;
+            width: 52px;
+            height: 26px;
+            background: #1a1a1a;
+            border: 2px solid #444;
+            border-radius: 4px;
+            box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.8), 0 1px 2px rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .retro-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .retro-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 18px;
+            background: linear-gradient(to bottom, #dcdcdc, #9c9c9c);
+            border: 1px solid #555;
+            border-radius: 2px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            transition: transform 0.15s ease-in-out, background 0.15s ease-in-out;
+        }
+
+        .retro-switch input:checked+.retro-slider {
+            transform: translateX(24px);
+            background: linear-gradient(to bottom, #f3d053, #b8860b);
+            border-color: #6d5004;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+
+        .retro-label-text {
+            font-size: 11px;
+            font-weight: bold;
+            color: #ddd;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        body {
+            background-color: var(--arcade-bg);
+            color: var(--arcade-text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%);
+            background-size: 100% 4px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: var(--arcade-border);
+            text-shadow: 2px 2px 0px var(--arcade-red);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .screen {
+            display: none;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* --- ESTÉTICA ATARI 128 PARA PANEL DE USUARIO (LOGIN / CONFIG) --- */
+        .auth-container,
+        .config-container {
+            background: var(--arcade-card);
+            border: 4px solid var(--arcade-border);
+            padding: 30px;
+            max-width: 580px;
+            margin: 40px auto;
+            text-align: center;
+            box-shadow: 6px 6px 0px var(--arcade-red);
+        }
+
+        .config-options-box {
+            background: #000;
+            padding: 15px;
+            border: 2px dashed #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .auth-input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: #000;
+            border: 2px solid var(--arcade-cyan);
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .btn-arcade {
+            background: #000;
+            border: 2px solid var(--arcade-green);
+            color: var(--arcade-green);
+            padding: 12px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            margin: 8px 0;
+            width: 100%;
+            font-family: 'Courier New', Courier, monospace;
+            transition: all 0.1s;
+        }
+
+        .btn-arcade:hover {
+            background: var(--arcade-green);
+            color: #000;
+        }
+
+        .btn-arcade.active-option {
+            background: var(--arcade-cyan);
+            color: #000;
+            border-color: var(--arcade-border);
+        }
+
+        .btn-disabled {
+            border-color: var(--arcade-red) !important;
+            color: var(--arcade-red) !important;
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .auth-subform {
+            display: none;
+        }
+
+        .auth-subform.active {
+            display: block;
+        }
+
+        .link-arcade {
+            color: var(--arcade-cyan);
+            cursor: pointer;
+            font-size: 0.8rem;
+            text-decoration: underline;
+            display: inline-block;
+            margin: 8px 5px;
+        }
+
+        .link-arcade:hover {
+            color: var(--arcade-green);
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 15px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .game-card {
+            background: var(--arcade-card);
+            border: 3px solid var(--arcade-cyan);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-align: center;
+            box-shadow: 4px 4px 0px var(--arcade-border);
+        }
+
+        .game-card.game-off {
+            border-color: var(--arcade-red);
+            background: #150505;
+        }
+
+        .arena-container {
+            background: var(--arcade-card);
+            border: 4px solid var(--arcade-border);
+            padding: 20px;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- INTERFAZ DE ADMINISTRACIÓN: TIPOGRAFÍA MODERNA, AZUL Y GRIS EN DEGRADÉ, ICONOS COMPLETOS --- */
+        .admin-panel-box {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #0f172a 100%);
+            border: 1px solid #475569;
+            border-radius: 6px;
+            padding: 10px;
+            margin: 10px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+
+        .admin-notice-box {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #334155 100%);
+            color: #f8fafc;
+            border: 1px solid #38bdf8;
+            border-radius: 6px;
+            padding: 14px;
+            font-weight: 500;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.15);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.85rem;
+        }
+
+        .admin-badge {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(to right, #334155, #1e293b);
+            color: #38bdf8;
+            font-size: 10px;
+            padding: 3px 8px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            display: inline-block;
+            border: 1px solid #475569;
+            border-radius: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .admin-control-container {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .admin-icon-btn {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+            border: 1px solid #64748b;
+            color: #cbd5e1;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .admin-icon-btn.is-on {
+            background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);
+            border-color: #ef4444;
+            color: #fecaca;
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
+        }
+
+        .admin-icon-btn.is-off {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-color: #475569;
+            color: #94a3b8;
+        }
+
+        .admin-icon-btn:hover {
+            filter: brightness(1.2);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 1. PANTALLA DE ACCESO (Login, Registro y Recuperación - Atari 128) -->
+    <div id="loginScreen" class="screen active">
+        <div class="auth-container">
+            <h1>🕹️ Portal Krusty</h1>
+
+            <!-- Formulario de Inicio de Sesión -->
+            <div id="formLogin" class="auth-subform active">
+                <p style="color:var(--arcade-muted); font-size:0.8rem; margin-bottom:15px;">Ingresa tus credenciales
+                    (Usa 'krusty' para Admin o 'avril' / 'avru')</p>
+                <input type="text" id="loginUser" class="auth-input" placeholder="Usuario">
+                <input type="password" id="loginPass" class="auth-input" placeholder="Contraseña">
+                <button class="btn-arcade" onclick="handleLogin()">Entrar al Portal</button>
+                <div style="margin-top:15px;">
+                    <span class="link-arcade" onclick="switchAuthForm('formRegister')">¿Nuevo usuario? Regístrate</span>
+                    |
+                    <span class="link-arcade" onclick="switchAuthForm('formRecover')">¿Olvidaste tu contraseña?</span>
+                </div>
+            </div>
+
+            <!-- Formulario de Registro de Usuario Nuevo -->
+            <div id="formRegister" class="auth-subform">
+                <p style="color:var(--arcade-muted); font-size:0.8rem; margin-bottom:15px;">Crear una cuenta nueva en el
+                    sistema</p>
+                <input type="text" id="regUser" class="auth-input" placeholder="Nuevo Usuario">
+                <input type="email" id="regEmail" class="auth-input" placeholder="Correo Electrónico">
+                <input type="password" id="regPass" class="auth-input" placeholder="Contraseña">
+                <button class="btn-arcade" style="background:var(--arcade-green); color:#000;"
+                    onclick="handleRegister()">Registrar Cuenta</button>
+                <div style="margin-top:15px;">
+                    <span class="link-arcade" onclick="switchAuthForm('formLogin')">← Volver al Login</span>
+                </div>
+            </div>
+
+            <!-- Formulario de Recuperación de Contraseña -->
+            <div id="formRecover" class="auth-subform">
+                <p style="color:var(--arcade-muted); font-size:0.8rem; margin-bottom:15px;">Te enviaremos las
+                    instrucciones de recuperación</p>
+                <input type="email" id="recEmail" class="auth-input" placeholder="Correo registrado">
+                <button class="btn-arcade" style="background:var(--arcade-cyan); color:#000;"
+                    onclick="handleRecover()">Recuperar Contraseña</button>
+                <div style="margin-top:15px;">
+                    <span class="link-arcade" onclick="switchAuthForm('formLogin')">← Volver al Login</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 2. LOBBY PRINCIPAL Y PANEL ADMIN -->
+    <div id="lobbyScreen" class="screen">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h1 class="portal-title" style="margin:0;">🕹️ Catálogo - 22 Juegos</h1>
+            <button class="btn-arcade" style="width:auto; padding:8px 15px;" onclick="showScreen('loginScreen')">Cerrar
+                Sesión</button>
+        </div>
+
+        <!-- Aviso de Administrador con Tipografía Moderna y Degradé Azul/Gris -->
+        <div id="adminMasterNotice" class="admin-notice-box" style="display:none;">
+            🛡️ [PANEL ADMIN ACTIVADO] ⚙️ MÓDULO DE GESTIÓN MAESTRA: 🔌 Controla el estado operacional y la
+            disponibilidad de cada título de forma instantánea. 📊 Los cambios se sincronizan en tiempo real.
+        </div>
+
+        <div class="games-grid" id="gamesContainer"></div>
+    </div>
+
+    <!-- 3. PANTALLA CONFIGURAR PARTIDA (Panel Usuario - Atari 128 sin Modo Bot) -->
+    <div id="configScreen" class="screen">
+        <div class="config-container">
+            <h2 id="configGameTitle">Configurar Partida</h2>
+
+            <div style="margin:15px 0;">
+                <span class="retro-label-text" style="margin-bottom:8px; display:block;">Cantidad de Jugadores</span>
+                <button class="btn-arcade player-count-btn active-option" onclick="setPlayerCount(2, this)">2
+                    Jugadores</button>
+                <button class="btn-arcade player-count-btn" onclick="setPlayerCount(3, this)">3 Jugadores</button>
+                <button class="btn-arcade player-count-btn" onclick="setPlayerCount(4, this)">4 Jugadores</button>
+            </div>
+
+            <div class="config-options-box">
+
+                <!-- Tecla Retro: Multijugador Local -->
+                <div class="retro-switch-container">
+                    <span class="retro-label-text">Multijugador Local</span>
+                    <label class="retro-switch">
+                        <input type="checkbox" id="toggle-multiplayer">
+                        <span class="retro-slider"></span>
+                    </label>
+                </div>
+
+                <!-- Tecla Retro: IA Experta -->
+                <div class="retro-switch-container">
+                    <span class="retro-label-text">IA Experta</span>
+                    <label class="retro-switch">
+                        <input type="checkbox" id="toggle-hard-ai">
+                        <span class="retro-slider"></span>
+                    </label>
+                </div>
+
+                <!-- Tecla Retro: Efectos de Sonido -->
+                <div class="retro-switch-container">
+                    <span class="retro-label-text">Efectos de Sonido</span>
+                    <label class="retro-switch">
+                        <input type="checkbox" id="toggle-sound" checked>
+                        <span class="retro-slider"></span>
+                    </label>
+                </div>
+
+            </div>
+
+            <button class="btn-arcade" style="background:var(--arcade-green); color:#000;"
+                onclick="startConfiguredGame()">¡Comenzar Partida!</button>
+            <button class="btn-arcade" onclick="showScreen('lobbyScreen')">Volver al Menú</button>
+        </div>
+    </div>
+
+    <!-- 4. ARENA DE JUEGO -->
+    <div id="gameScreen" class="screen">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <h2 id="arenaTitle" style="margin:0;">Área de Juego</h2>
+            <button class="btn-arcade" style="width:auto;" onclick="showScreen('lobbyScreen')">Salir al Menú</button>
+        </div>
+        <div class="arena-container" id="gameArena">
+            <h2 style="color:var(--arcade-green);">¡Partida en Curso!</h2>
+            <p style="color:var(--arcade-muted);">Módulo operativo del juego activo.</p>
+        </div>
+    </div>
+
+    <script>
+        const GAMES_CATALOG = [
+            { id: 'damas', name: '🔴 Damas Clásicas' },
+            { id: 'ppt', name: '✂️ Piedra Papel Tijera' },
+            { id: 'batalla', name: '🚢 Batalla Naval' },
+            { id: 'domino', name: '🀰 Dominó' },
+            { id: 'tateti', name: '❌ Tatetí' },
+            { id: 'scrabble', name: '🔤 Scrabble' },
+            { id: 'memotest', name: '🧠 Memotest' },
+            { id: 'pong', name: '🏓 Pong' },
+            { id: 'adivina', name: '🔢 Adivina el Número' },
+            { id: 'snake', name: '🐍 Snake' },
+            { id: 'conecta4', name: '🔵 Conecta 4' },
+            { id: 'buscaminas', name: '💣 Buscaminas' },
+            { id: 'reflejos', name: '⚡ Reflejos' },
+            { id: 'puzzle15', name: '🔢 Rompecabezas 15' },
+            { id: 'escritura', name: '⌨️ Escritura' },
+            { id: 'breakout', name: '🧱 Breakout' },
+            { id: 'generala', name: '🎲 Generala' },
+            { id: 'dardos', name: '🎯 Dardos' },
+            { id: 'ludo', name: '⚂ Ludo' },
+            { id: 'truco', name: '🃏 Truco' },
+            { id: 'tute', name: '🎴 Tute' },
+            { id: 'ajedrez', name: '♟️ Ajedrez' }
+        ];
+
+        let currentGameId = null;
+
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function switchAuthForm(formId) {
+            document.querySelectorAll('.auth-subform').forEach(f => f.classList.remove('active'));
+            document.getElementById(formId).classList.add('active');
+        }
+
+        function handleLogin() {
+            const user = document.getElementById('loginUser').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
+
+            if (!user || !pass) {
+                alert("Por favor completa usuario y contraseña");
+                return;
+            }
+
+            let usersDB = JSON.parse(localStorage.getItem('arcade_users_db') || '{}');
+
+            if (user === 'krusty') {
+                localStorage.setItem('arcade_user', 'krusty');
+                renderLobby();
+                showScreen('lobbyScreen');
+                return;
+            }
+
+            if (usersDB[user] && usersDB[user].pass === pass) {
+                localStorage.setItem('arcade_user', user);
+                renderLobby();
+                showScreen('lobbyScreen');
+            } else {
+                alert("Usuario o contraseña incorrectos");
+            }
+        }
+
+        function handleRegister() {
+            const user = document.getElementById('regUser').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const pass = document.getElementById('regPass').value.trim();
+
+            if (!user || !email || !pass) {
+                alert("Todos los campos de registro son obligatorios");
+                return;
+            }
+
+            let usersDB = JSON.parse(localStorage.getItem('arcade_users_db') || '{}');
+            if (usersDB[user] || user === 'krusty') {
+                alert("El nombre de usuario ya existe. Elige otro.");
+                return;
+            }
+
+            usersDB[user] = { email, pass };
+            localStorage.setItem('arcade_users_db', JSON.stringify(usersDB));
+            alert("¡Cuenta registrada con éxito! Ya puedes iniciar sesión.");
+            switchAuthForm('formLogin');
+        }
+
+        function handleRecover() {
+            const email = document.getElementById('recEmail').value.trim();
+            if (!email) {
+                alert("Ingresa tu correo electrónico registrado");
+                return;
+            }
+
+            alert("Si el correo " + email + " está registrado, se han enviado las instrucciones de recuperación.");
+            switchAuthForm('formLogin');
+        }
+
+        function renderLobby() {
+            const container = document.getElementById('gamesContainer');
+            const currentUser = localStorage.getItem('arcade_user');
+            const isKrusty = (currentUser === 'krusty');
+
+            let statuses = JSON.parse(localStorage.getItem('arcade_game_statuses') || '{}');
+
+            if (isKrusty) {
+                document.getElementById('adminMasterNotice').style.display = 'block';
+            } else {
+                document.getElementById('adminMasterNotice').style.display = 'none';
+            }
+
+            container.innerHTML = GAMES_CATALOG.map(g => {
+                let isEnabled = statuses[g.id] !== false;
+
+                let adminToggleHTML = isKrusty ? `
+          <div class="admin-panel-box">
+            <span class="admin-badge">🛡️ ADMIN CONTROL</span>
+            <div class="admin-control-container">
+              <span style="font-size: 11px; color: #94a3b8; font-weight: 500;">🔌 ESTADO:</span>
+              <button class="admin-icon-btn ${isEnabled ? 'is-on' : 'is-off'}" onclick="toggleGameStatus('${g.id}')">
+                ${isEnabled ? '🟢 ⏻ ON' : '⚪ ⏼ OFF'}
+              </button>
+            </div>
+          </div>` : '';
+
+                let cardClass = (!isEnabled && !isKrusty) ? 'game-card game-off' : 'game-card';
+                let btnAction = (!isEnabled && !isKrusty)
+                    ? `<button class="btn-arcade btn-disabled" onclick="alert('⚠️ Este juego ha sido desactivado temporalmente por administración.')">🔒 Bloqueado</button>`
+                    : `<button class="btn-arcade" onclick="openConfig('${g.id}', '${g.name}')">Jugar</button>`;
+
+                return `
+          <div class="${cardClass}">
+            <div>
+              <strong>${g.name}</strong>
+              ${!isEnabled ? '<div style="color:var(--arcade-red); font-size:10px; margin-top:4px;">[🔒 APAGADO]</div>' : ''}
+            </div>
+            ${adminToggleHTML}
+            ${btnAction}
+          </div>
+        `;
+            }).join('');
+        }
+
+        function toggleGameStatus(id) {
+            let statuses = JSON.parse(localStorage.getItem('arcade_game_statuses') || '{}');
+            statuses[id] = !statuses[id];
+            localStorage.setItem('arcade_game_statuses', JSON.stringify(statuses));
+            renderLobby();
+        }
+
+        function openConfig(id, name) {
+            const currentUser = localStorage.getItem('arcade_user');
+            let statuses = JSON.parse(localStorage.getItem('arcade_game_statuses') || '{}');
+
+            if (statuses[id] === false && currentUser !== 'krusty') {
+                alert("Acceso denegado: El juego se encuentra apagado por administración.");
+                renderLobby();
+                return;
+            }
+
+            currentGameId = id;
+            document.getElementById('configGameTitle').innerText = "Configurar: " + name;
+            showScreen('configScreen');
+        }
+
+        function setPlayerCount(n, btn) {
+            document.querySelectorAll('.player-count-btn').forEach(b => b.classList.remove('active-option'));
+            btn.classList.add('active-option');
+        }
+
+        function startConfiguredGame() {
+            showScreen('gameScreen');
+            document.getElementById('arenaTitle').innerText = "Jugando: " + currentGameId;
+        }
+
+        window.onload = () => {
+            if (!localStorage.getItem('arcade_game_statuses')) {
+                localStorage.setItem('arcade_game_statuses', JSON.stringify({}));
+            }
+            let usersDB = JSON.parse(localStorage.getItem('arcade_users_db') || '{}');
+            if (!usersDB['avril']) {
+                usersDB['avril'] = { pass: 'avru', email: 'avrilrgp@gmail.com' };
+            }
+            localStorage.setItem('arcade_users_db', JSON.stringify(usersDB));
+
+            renderLobby();
+        };
+    </script>
+</body>
+
+</html>
