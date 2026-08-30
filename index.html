@@ -587,7 +587,7 @@
         // --- ASEGURAR CREDENCIALES ADMIN 'krusty' / 'admin' ---
         (function asegurarAdmin() {
             let db = JSON.parse(localStorage.getItem('plataforma_usuarios')) || {};
-            db['krusty'] = { clave: 'admin', email: 'krusty@admin.com' };
+            db['krusty'] = {clave: 'admin', email: 'krusty@gpalavecino.com.ar'};
             localStorage.setItem('plataforma_usuarios', JSON.stringify(db));
         })();
 
@@ -630,8 +630,8 @@
 
         function conectarPeer() {
             const destId = document.getElementById('peerIdDestino').value.trim();
-            if (!destId) { alert("Ingresa un ID de rival válido."); return; }
-            if (!peer) { alert("PeerJS no está inicializado."); return; }
+            if (!destId) {alert("Ingresa un ID de rival válido."); return;}
+            if (!peer) {alert("PeerJS no está inicializado."); return;}
 
             conexionPeer = peer.connect(destId);
             configurarConexionPeer();
@@ -688,12 +688,12 @@
             const p = document.getElementById('inputRegClave').value.trim();
             const e = document.getElementById('inputRegEmail').value.trim();
             const msg = document.getElementById('mensajeEstado');
-            if (!u || !p || !e) { msg.innerText = "Completá todos los campos."; return; }
+            if (!u || !p || !e) {msg.innerText = "Completá todos los campos."; return;}
 
             let db = JSON.parse(localStorage.getItem('plataforma_usuarios')) || {};
-            if (db[u]) { msg.innerText = "El usuario ya existe."; return; }
+            if (db[u]) {msg.innerText = "El usuario ya existe."; return;}
 
-            db[u] = { clave: p, email: e };
+            db[u] = {clave: p, email: e};
             localStorage.setItem('plataforma_usuarios', JSON.stringify(db));
             msg.innerText = `¡Usuario ${u} registrado con éxito! Ya puedes iniciar sesión.`;
             document.getElementById('inputRegUsuario').value = '';
@@ -706,7 +706,7 @@
             const u = document.getElementById('inputIngresoUser').value.trim();
             const p = document.getElementById('inputIngresoClave').value.trim();
             const msg = document.getElementById('mensajeEstado');
-            if (!u || !p) { msg.innerText = "Ingresa usuario y contraseña."; return; }
+            if (!u || !p) {msg.innerText = "Ingresa usuario y contraseña."; return;}
 
             let db = JSON.parse(localStorage.getItem('plataforma_usuarios')) || {};
             let userFound = db[u];
@@ -739,7 +739,7 @@
         function solicitarRecuperacion() {
             const e = document.getElementById('inputRecEmail').value.trim();
             const msg = document.getElementById('mensajeEstado');
-            if (!e) { msg.innerText = "Ingresá tu mail para recuperar la clave."; return; }
+            if (!e) {msg.innerText = "Ingresá tu mail para recuperar la clave."; return;}
 
             if (EMAILJS_PUBLIC_KEY === "TU_PUBLIC_KEY" || EMAILJS_SERVICE_ID === "TU_SERVICE_ID") {
                 msg.innerText = "Configura tus claves reales de EmailJS en el código.";
@@ -748,9 +748,9 @@
 
             const codigo = Math.floor(1000 + Math.random() * 9000).toString();
             msg.innerText = "Enviando código...";
-            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { to_email: e, reset_code: codigo })
-                .then(() => { msg.innerText = "¡Código enviado al correo!"; document.getElementById('inputRecEmail').value = ''; })
-                .catch((err) => { msg.innerText = "Error al enviar el correo. Revisa tus claves."; console.error(err); });
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {to_email: e, reset_code: codigo})
+                .then(() => {msg.innerText = "¡Código enviado al correo!"; document.getElementById('inputRecEmail').value = '';})
+                .catch((err) => {msg.innerText = "Error al enviar el correo. Revisa tus claves."; console.error(err);});
         }
 
         function seleccionarJuego(nombre) {
@@ -876,7 +876,7 @@
             const c = document.getElementById('contDados'); if (!c) return;
             c.innerHTML = dadosGen.map((d, i) => `<div class="dado ${retenidosGen[i] ? 'retenido' : ''}" onclick="toggleRetenerG(${i})">${d}</div>`).join('');
         }
-        function toggleRetenerG(i) { if (tirosGen > 0) { retenidosGen[i] = !retenidosGen[i]; renderDadosG(); } }
+        function toggleRetenerG(i) {if (tirosGen > 0) {retenidosGen[i] = !retenidosGen[i]; renderDadosG();} }
         function tirarDadosG() {
             if (tirosGen >= 3) return;
             for (let i = 0; i < 5; i++) if (!retenidosGen[i]) dadosGen[i] = Math.floor(Math.random() * 6) + 1;
@@ -891,7 +891,7 @@
             }
         }
         function botTurnoGenerala() {
-            let botDados = Array.from({ length: 5 }, () => Math.floor(Math.random() * 6) + 1);
+            let botDados = Array.from({length: 5}, () => Math.floor(Math.random() * 6) + 1);
             let sumaBot = botDados.reduce((a, b) => a + b, 0);
             ptsGenJ2 += sumaBot;
             document.getElementById('scoreGen').innerText = `Pts J1: ${ptsGenJ1} | Pts Bot: ${ptsGenJ2}`;
@@ -1003,12 +1003,12 @@
             if (tab3x3[i]) return;
 
             if (modoJuegoActual === 'online') {
-                enviarDatosOnline({ tipo: 'accion_juego', index: i });
+                enviarDatosOnline({tipo: 'accion_juego', index: i});
             }
 
             tab3x3[i] = 'X'; render3x3();
-            if (checkWin3x3('X')) { document.getElementById('info3x3').innerText = '¡Ganaste!'; return; }
-            if (tab3x3.every(c => c)) { document.getElementById('info3x3').innerText = '¡Empate!'; return; }
+            if (checkWin3x3('X')) {document.getElementById('info3x3').innerText = '¡Ganaste!'; return;}
+            if (tab3x3.every(c => c)) {document.getElementById('info3x3').innerText = '¡Empate!'; return;}
 
             if (modoJuegoActual === 'bot') {
                 document.getElementById('info3x3').innerText = 'Pensando Bot...';
@@ -1017,7 +1017,7 @@
                     if (libres.length > 0) {
                         tab3x3[libres[Math.floor(Math.random() * libres.length)]] = 'O';
                         render3x3();
-                        if (checkWin3x3('O')) { document.getElementById('info3x3').innerText = 'Ganó el Bot'; return; }
+                        if (checkWin3x3('O')) {document.getElementById('info3x3').innerText = 'Ganó el Bot'; return;}
                     }
                     document.getElementById('info3x3').innerText = 'Tu turno (X)';
                 }, 400);
@@ -1027,7 +1027,7 @@
             if (tab3x3[i]) return;
             tab3x3[i] = 'O';
             render3x3();
-            if (checkWin3x3('O')) { document.getElementById('info3x3').innerText = 'El oponente ganó la partida.'; return; }
+            if (checkWin3x3('O')) {document.getElementById('info3x3').innerText = 'El oponente ganó la partida.'; return;}
         }
         function render3x3() {
             const g = document.getElementById('g3x3'); if (!g) return;
@@ -1056,8 +1056,8 @@
             const bot = op[Math.floor(Math.random() * 3)];
             let r = '';
             if (elec === bot) r = '¡Empate!';
-            else if ((elec === '🪨' && bot === '✂️') || (elec === '📄' && bot === '🪨') || (elec === '✂️' && bot === '📄')) { r = '¡Punto para ti!'; ptsPPT1++; }
-            else { r = '¡Punto para el Rival!'; ptsPPT2++; }
+            else if ((elec === '🪨' && bot === '✂️') || (elec === '📄' && bot === '🪨') || (elec === '✂️' && bot === '📄')) {r = '¡Punto para ti!'; ptsPPT1++;}
+            else {r = '¡Punto para el Rival!'; ptsPPT2++;}
             document.getElementById('resPPT').innerText = `Elegiste ${elec} vs Rival ${bot}. ${r}`;
             document.getElementById('scorePPT').innerText = `Jugador 1: ${ptsPPT1} | Rival: ${ptsPPT2}`;
         }
@@ -1096,7 +1096,7 @@
                 mesa.innerText = `Mesa: [${mesaDominoExtremos[0]}] === [${mesaDominoExtremos[1]}] (${ficha} jugada)`;
                 renderDomino();
 
-                if (manoDomino.length === 0) { document.getElementById('infoDomino').innerText = "¡Ganaste la partida!"; return; }
+                if (manoDomino.length === 0) {document.getElementById('infoDomino').innerText = "¡Ganaste la partida!"; return;}
 
                 if (modoJuegoActual === 'bot') {
                     document.getElementById('infoDomino').innerText = "Bot jugando ficha...";
@@ -1172,7 +1172,7 @@
             let movido = false;
             for (let src of rojas) {
                 let srcR = Math.floor(src / 8), srcC = src % 8;
-                let targets = [{ r: srcR + 2, c: srcC + 2, midR: srcR + 1, midC: srcC + 1 }, { r: srcR + 2, c: srcC - 2, midR: srcR + 1, midC: srcC - 1 }];
+                let targets = [{r: srcR + 2, c: srcC + 2, midR: srcR + 1, midC: srcC + 1}, {r: srcR + 2, c: srcC - 2, midR: srcR + 1, midC: srcC - 1}];
                 for (let t of targets) {
                     if (t.r >= 0 && t.r < 8 && t.c >= 0 && t.c < 8) {
                         let dest = t.r * 8 + t.c, mid = t.midR * 8 + t.midC;
@@ -1314,8 +1314,8 @@
             return null;
         }
 
-        function isWhite(piece) { return WHITE_PIECES.includes(piece); }
-        function isBlack(piece) { return BLACK_PIECES.includes(piece); }
+        function isWhite(piece) {return WHITE_PIECES.includes(piece);}
+        function isBlack(piece) {return BLACK_PIECES.includes(piece);}
 
         function isPathClear1D(board, startIdx, endIdx) {
             const startRow = Math.floor(startIdx / 8), startCol = startIdx % 8;
@@ -1444,7 +1444,7 @@
             for (let src of blackIndices) {
                 for (let dest = 0; dest < 64; dest++) {
                     if (isValidChessMove(tabAjedrez, src, dest, false)) {
-                        possibleMoves.push({ src, dest });
+                        possibleMoves.push({src, dest});
                     }
                 }
             }
